@@ -1,0 +1,71 @@
+<?php
+		require_once("../model/Customer.php");
+
+		//se connecte à une BDD passée en paramètre
+		function connection($base){
+			$resConnect=mysql_connect("localhost","root","cochon6");
+			if($resConnect==false){
+				throw new Exception("erreur d'authentification mysql");
+			}
+			$resUse=mysql_query('use '.$base);
+			if($resUse==false){
+				throw new Exception("erreur connection base".$base);
+			}
+		}
+
+		//retourne le client correspondant à l'id et le mdp passé
+		function authentification($login,$password){ 
+			connection("merch");
+			$query='select * from Client where mailClient='.'"'.$login.'"';
+			$query.=' and passwordClient='.'"'.$password.'"';
+			$res=mysql_query($query);
+			if(mysql_num_rows($res)==0){
+				throw new Exception('erreur authentification site');
+			}
+			$tab=mysql_fetch_row($res);
+			$customer=new Customer($tab);
+			return $customer;
+		}
+
+		//affiche les n-uplets  d'une table passée en paramètres
+		function show($table){
+			connection("merch");
+			$res=mysql_query('select * from '.$table);
+			echo $res;
+			if($res==false){
+				echo 'exception';
+				throw new Exception('erreur affichage table '.$table);
+			}
+			echo 'ok';
+			$tab=mysql_fetch_array($res);
+			print_r($tab);
+		}
+
+		//ajoute un élément à la table passés en paramètres
+		function add($base,$element){
+			connection("merch");
+			$query='insert into '.$base.' values(';
+			for ($i=0;$i<count($element)-1;$i++) {
+				$query.='"'.$element[$i].'"'.',';
+			}
+			$query.='"'.$element[$i].'"'.')';
+			$res=mysql_query($query);
+			if($res==false){
+				throw new Exception('erreur ajout dans base'.$base);
+			}
+		}
+
+		function deleteProductCommande($idProduct,$idCommande){
+			connection("merch");
+			$query='delete from ListeProduit where ';
+			$query.='refCommande='.'"'.$idCommande.'" ';
+			$query.='and LibelleProduit='.'"'.$idProduct.'"';
+			$res=mysql_query($query);
+			if($res==false){
+				throw new Exception('erreur suppression produit '.$idProduct.'commande '.$idCommande);
+			}
+		}
+		
+		$tab=array('3','John','Doe','','','');
+
+?>
