@@ -7,7 +7,7 @@ Class colonne {
 
 	public function generate(){
 		echo '<td>';
-		//$this->m_item->generate();
+		echo $this->m_item;
 		echo '</td>';
 	}
 }

@@ -16,7 +16,7 @@ Class Ligne {
 	}
 
 	public function generate(){
-		echo '<tr name="'.$this->m_name.'"'.' id="'.$this->m_id.'"'.'>';
+		echo '<tr name="'.$this->m_name.'"'.' id="'.$this->m_id.'"'.' >';
 		foreach ($this->m_colonnes as $key => $colonne) {
 			$colonne->generate();
 		}
