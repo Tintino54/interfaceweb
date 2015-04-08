@@ -1,6 +1,6 @@
 <?php
 
-//require_once("../model/CoreObject.php");
+require_once("./view/Tableau/Tableau.php");
 class Document {
 	
 	// default constructor : calls htmlHeader
@@ -44,6 +44,16 @@ class Document {
 		echo '</body>';
 		echo '</html>';
 	}
+
+	public function writeProblems(){
+		$tableau = new Tableau("problemes", "prob", 5);
+		for($i = 0; $i<12; $i++){
+			$probleme = new Ligne('<h5><a>titre problème</a></h5><p>description</p>');
+			$tableau->addLigne($probleme);
+		}
+		$tableau->generate();
+	}
+
 	// begin a subject section
 	public function beginSection($name, $id=""){
 		echo '<div ';

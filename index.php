@@ -11,6 +11,7 @@ $document = new Document("view/style.css", "", "utf8");
 $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
+$document->writeProblems();
 $document->endSection();
 $document->end();
 ?>
