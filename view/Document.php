@@ -27,15 +27,10 @@ class Document {
 	public function header(){
 		echo '<header id="mainHeader">';
         echo '<div id="mainTitle">';
-        echo '<h1>Prof</h1>';
-        echo '<h2>PHP Rad ORM framework</h2>';
+        echo '<h1>IPAW</h1>';
+        echo '<h2>Interface problem algorithm web</h2>';
         echo '</div>';
-        echo '<ul id="tabs">';
-        echo  '<li><a href="../index.php">Home</a></li>';
-        echo   '<li><a href="#">About</a></li>';
-        echo  '<li><a href="#">Documentation</a></li>';
-        echo   '<li><a href="#">Login</a></li>';
-        echo '</ul>';
+        echo '<img src="./view/American-Native3.gif" alt="logo" height="100" width="100" style = "float: right">';
 		echo '</header>';
 	}
 	
@@ -43,7 +38,8 @@ class Document {
 	public function end() {
 		echo '<footer>';
         echo '<hr>';
-        echo '<p>© 2015 Alexandre Le Fol | Valentin Ginisty</p>';
+        echo '<p>04/2015 | Alexandre Le Fol | Valentin Ginisty</p>';
+        echo "<p>Création d'interface dans un cadre de projet</p>";
 		echo '</footer>';
 		echo '</body>';
 		echo '</html>';
