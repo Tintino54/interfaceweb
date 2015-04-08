@@ -18,7 +18,7 @@ Class Tableau{
 	}
 
 	public function generate(){
-		echo '<table name="'.$this->m_name.'"'.' id="'.$this->m_id.'"'.' >';
+		echo '<table cellspacing="50" name="'.$this->m_name.'"'.' id="'.$this->m_id.'"'.' >';
 		echo '<tr>';
 		$compteur = 0;
 		foreach ($this->m_lignes as $key => $ligne) {
