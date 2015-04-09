@@ -20,7 +20,10 @@ for($i=2;$i<count($tabDir);$i++) {
 }
 echo '</ul>';
 
+//liste des algos
+echo '<ul>';
 
+echo '</ul>';
 
 $document->endSection();
 $document->end();
