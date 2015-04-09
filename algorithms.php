@@ -4,9 +4,12 @@ $document = new Document("view/style.css", "", "utf8");
 $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
-$path=$_GET['var1'];
+$var = $_GET['var1'];
+$path=$var;
 $path.='/instancesNK';
 $tabDir=scandir($path);
+
+echo '<h1>'.$var.'</h1>';
 
 //liste des instances avec le lien des téléchargements 
 echo '<ul>';
