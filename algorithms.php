@@ -9,7 +9,7 @@ $path=$var;
 $path.='/instancesNK';
 $tabDir=scandir($path);
 
-echo '<h1>'.$var.'</h1>';
+echo '<h1 id="titreProbleme">'.$var.'</h1>';
 
 //liste des instances avec le lien des téléchargements 
 echo '<ul>';
