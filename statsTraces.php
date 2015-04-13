@@ -14,7 +14,7 @@ echo '<ul>';
 for($i=2;$i<count($algorithmes);$i++) {
 	echo '<li>';
 		echo $algorithmes[$i];
-		echo calculScoreMoyen($path.'/'.$algorithmes[$i].'/'.$instance);
+		echo calculScoreMoyenTotal($path.'/'.$algorithmes[$i].'/'.$instance);
 	echo '</li>';
 }
 echo '</ul>';
