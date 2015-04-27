@@ -4,24 +4,36 @@ require_once("./view/Tableau/Tableau.php");
 class Document {
 	
 	// default constructor : calls htmlHeader
-	public function __construct($css="",$javascript="",$meta=""){
+	public function __construct($css="",$meta=""){
 		echo '<!DOCTYPE html>';
 		echo '<html>';
-		$this->htmlHeader($css,$javascript,$meta);
+		echo '<head>';
+		$this->meta($meta);
+		$this->css($css);
 	}
 	// start the <body> part of the page
 	public function begin($level=0){
 		echo '<body>';
 	}
 	// display the <head> part of the page
-	public function htmlHeader($css="",$javascript="",$meta=""){
-		echo '<head>';
+
+	public function meta($meta=""){
 		echo '<meta charset='.'"'.$meta.'"'.' />';
+	}
+
+	public function css($css=""){
 		echo '<link rel="stylesheet" type="text/css" href='.'"'.$css.'"'.' />';
+	}
+
+	//fin head
+	public function fh(){
+		echo '</head>';
+	}
+
+	public function addJavascript($javascript){
 		echo '<script type="text/javascript" ';
 		echo 'src="'.$javascript.'"'.' >';
 		echo '</script>';
-		echo '</head>';
 	}
 	// header section
 	public function header(){
@@ -56,6 +68,54 @@ class Document {
 			$tableau->addLigne($probleme);
 		}
 		$tableau->generate();
+	}
+
+	public function chart(){
+		echo '<div id="container" style="width:100%; height:400px;"></div>';
+		echo "<script>
+		alert($);
+	$(function () { 
+    $('#container').highcharts({
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Fruit Consumption'
+        },
+        xAxis: {
+            categories: ['Apples', 'Bananas', 'Oranges']
+        },
+        yAxis: {
+            title: {
+                text: 'Fruit eaten'
+            }
+        },
+        series: [{
+            name: 'Jane',
+            data: [1, 0, 4]
+        }, {
+            name: 'John',
+            data: [5, 7, 3]
+        }]
+    	});
+	});
+
+	var chart1; // globally available
+	$(function() {
+      chart1 = new Highcharts.StockChart({
+         chart: {
+            renderTo: 'container'
+         },
+         rangeSelector: {
+            selected: 1
+         },
+         series: [{
+            name: 'USD to EUR',
+            data: usdtoeur // predefined JavaScript array
+         }]
+      });
+   });
+	</script>";
 	}
 
 	// begin a subject section

@@ -7,12 +7,16 @@ require_once("view/Forms/FormFieldPassword.php");
 require_once("view/Forms/FormFieldSelect.php");
 require_once("view/Forms/FormFieldSubmit.php");
 
-$document = new Document("view/style.css", "", "utf8");
+$document = new Document("view/style.css", "utf8");
+$document->addJavascript("view/javascript/jquery.js");
+$document->addJavascript("view/javascript/highcharts.js");
+$document->fh();
 $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
 
 $document->writeProblems();
+$document->chart();
 $document->endSection();
 $document->end();
 ?>
