@@ -21,8 +21,8 @@ for($i=2;$i<count($tabDir);$i++) {
 		echo '<a href='.'"'.'downloadInstanceNK.php?var1='.$instances.'/'.$tabDir[$i].'"'.'>';
 		echo '<img src="view/ressources/download.gif" height="20" width="20">'; */
 //=======
-		echo '<a href='.'"'.'downloadInstanceNK.php?var1='.$path.'/'.$tabDir[$i].'"'.'>'.$tabDir[$i].'</a>';
-		echo '<a href='.'"'.'downloadInstanceNK.php?var1='.$path.'/'.$tabDir[$i].'"'.'>';
+		echo '<a href="grapheInstanceNK.php">'.$tabDir[$i].'</a>';
+		echo '<a href='.'"'.'downloadInstanceNK.php?var1='.$instances.'/'.$tabDir[$i].'"'.'>';
 		echo '<img src="view/ressources/downArrow.gif" height="20" width="20">'; 
 //>>>>>>> 758f29cf7b49a30f0cbb42cdba48c8fe3f02d20f
 		echo '</a>';
