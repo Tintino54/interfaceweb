@@ -1,36 +1,71 @@
-<?php
+ <?php
 require_once("view/Document.php");
+require_once("controller/calculsStats.php");
 $document = new Document("view/style.css", "utf8");
+$document->addJavascript("view/javascript/jquery.js");
+$document->addJavascript("view/javascript/highcharts.js");
 $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
-$var = $_GET['var1'];
-$path=$var;
-echo $path;
-echo '<h1 id="titreProbleme">'.$var.'</h1>';
-//liste des instances avec le lien des téléchargements
-$instances=$path.'/instancesNK'; 
-$tabDir=scandir($instances);
-echo '<ul>';
-for($i=2;$i<count($tabDir);$i++) {
-    echo '<li>';
-        echo '<a href="grapheInstanceNK.php?var1='.$tabDir[$i].'">'.$tabDir[$i].'</a>';
-        echo '<a href='.'"'.'downloadInstanceNK.php?var1='.$instances.'/'.$tabDir[$i].'"'.'>';
-        echo '<img src="view/ressources/downArrow.gif" height="20" width="20">'; 
-        echo '</a>';
-        echo '</li>';
+$instance=$_GET['var1'];
+$algos=scandir('problemeNK/traces');
+echo '<div id="container" style="width:100%; height:400px;"></div>';
+//script javascript générant le graphique
+$script="<script>
+$(function () {
+$('#container').highcharts({
+chart: {
+type: 'line'
+},
+title: {
+text: 'score algorithmes'
+},
+xAxis: {
+text: 'iteration'
+},
+yAxis: {
+title: {
+text: 'Fruit eaten'
 }
-echo '</ul>';
-/*liste des algos
-$algos=$path.'/traces';
-$tabDir=scandir($algos);
-echo '<ul>';
-for($i=2;$i<count($tabDir);$i++){
-    echo '<li>';
-        echo $tabDir[$i];
-    echo '</li>';
-};
-echo '</ul>';*/
-$document->endSection();
+},series: [";
+//création des courbes pour chaque algo
+for ($i=2; $i < count($algos); $i++) {
+$script.='{ name: '.'"'.$algos[$i].'", ';
+$path='problemeNK/traces/'.$algos[$i].'/'.$instance.'/moyenne_algo_trace';
+if(!$fichier=fopen($path,"r")){
+/* generationFichierScoreMoyen('../problemeNK/traces/'.$algos[$i].'/'.$instance);
+$fichier=fopen($path,"r");*/
+echo 'échec ouverture fichier';
+}
+$script.='data: [';
+fseek($fichier, 0);
+//on récupère l'ensemble des points
+while($ligne=fgets($fichier)){
+//ajout des coordonnées du point au graphe
+$script.='['.strstr($ligne,' ',true).', '.strstr($ligne,'0.').'],';
+}
+$script.=' ]}, ';
+	}
+fclose($fichier);
+$script.="]
+});
+});
+var chart1; // globally available
+ $(function() {
+chart1 = new Highcharts.StockChart({
+chart: {
+renderTo: 'container'
+},
+rangeSelector: {
+selected: 1
+},
+series: [{
+name: 'USD to EUR',
+data: usdtoeur // predefined JavaScript array
+}]
+});
+});
+</script>";echo $script;
+ $document->endSection();
 $document->end();
-?>
+?> 
