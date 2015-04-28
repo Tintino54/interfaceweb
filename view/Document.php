@@ -39,7 +39,7 @@ class Document {
 	public function header(){
 		echo '<header id="mainHeader">';
         echo '<div id="mainTitle">';
-        echo '<h1>Resultats d\'instances de problèmes</h1>';
+        echo '<h1>Résultats d\'instances de problèmes</h1>';
         echo '<h2>Avec outil de comparaison d\'algorithmes</h2>';
         echo '</div>';
         echo '<img src="./view/American-Native3.gif" alt="logo" height="100" width="100" style = "float: right">';
@@ -68,42 +68,6 @@ class Document {
 			$tableau->addLigne($probleme);
 		}
 		$tableau->generate();
-	}
-
-	public function chart(){
-		echo '<div id="container" style="width:100%; height:400px;"></div>';
-		echo "<script>
-	$(function () { 
-    $('#container').highcharts({
-        chart: {
-<<<<<<< HEAD
-            type: 'line'
-=======
-            type: 'spline'
->>>>>>> 7d4a29c7255fd481f41076a2afa30578779faa99
-        },
-        title: {
-            text: 'Fruit Consumption'
-        },
-        xAxis: {
-            categories: []
-        },
-        yAxis: {
-            title: {
-                text: 'Fruit eaten'
-            }
-        },
-        series: [{
-            name: 'Jane',
-            data: [1, 0, 4]
-        }, {
-            name: 'John',
-            data: [5, 7, 3]
-        }]
-    	});
-	});
-	alert(chart.get(1));
-	</script>";
 	}
 
 	// begin a subject section
