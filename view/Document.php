@@ -39,8 +39,8 @@ class Document {
 	public function header(){
 		echo '<header id="mainHeader">';
         echo '<div id="mainTitle">';
-        echo '<h1>IPAW</h1>';
-        echo '<h2>Interface problem algorithm web</h2>';
+        echo '<h1>Resultats d\'instances de problèmes</h1>';
+        echo '<h2>Avec outil de comparaison d\'algorithmes</h2>';
         echo '</div>';
         echo '<img src="./view/American-Native3.gif" alt="logo" height="100" width="100" style = "float: right">';
 		echo '</header>';
@@ -73,17 +73,16 @@ class Document {
 	public function chart(){
 		echo '<div id="container" style="width:100%; height:400px;"></div>';
 		echo "<script>
-		alert($);
 	$(function () { 
     $('#container').highcharts({
         chart: {
-            type: 'bar'
+            type: 'spline'
         },
         title: {
             text: 'Fruit Consumption'
         },
         xAxis: {
-            categories: ['Apples', 'Bananas', 'Oranges']
+            categories: []
         },
         yAxis: {
             title: {
@@ -99,22 +98,7 @@ class Document {
         }]
     	});
 	});
-
-	var chart1; // globally available
-	$(function() {
-      chart1 = new Highcharts.StockChart({
-         chart: {
-            renderTo: 'container'
-         },
-         rangeSelector: {
-            selected: 1
-         },
-         series: [{
-            name: 'USD to EUR',
-            data: usdtoeur // predefined JavaScript array
-         }]
-      });
-   });
+	alert(chart.get(1));
 	</script>";
 	}
 

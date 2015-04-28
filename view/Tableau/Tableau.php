@@ -25,7 +25,7 @@ Class Tableau{
 			$ligne->generate();	
 			$compteur++;
 			if($compteur % $this->m_nbColonnes == 0){
-						echo '</tr>';
+						echo '</tr><tr>';
 						$compteur = 0;
 			}
 		}
