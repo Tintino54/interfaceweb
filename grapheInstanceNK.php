@@ -1,5 +1,6 @@
 <?php
 require_once("view/Document.php");
+require_once("controller/calculsStats.php");
 $document = new Document("view/style.css", "utf8");
 $document->addJavascript("view/javascript/jquery.js");
 $document->addJavascript("view/javascript/highcharts.js");
@@ -9,6 +10,7 @@ $document->beginSection("corpPage", "formdiv");
 	$instance=$_GET['var1'];
 	$algos=scandir('problemeNK/traces');
 	echo '<div id="container" style="width:100%; height:400px;"></div>';
+    //script javascript générant le graphique
 	$script="<script>
 	$(function () { 
     $('#container').highcharts({
@@ -30,7 +32,11 @@ $document->beginSection("corpPage", "formdiv");
      	for ($i=2; $i < count($algos); $i++) { 
      		$script.='{ name: '.'"'.$algos[$i].'", ';
             $path='problemeNK/traces/'.$algos[$i].'/'.$instance.'/moyenne_algo_trace';
-            $fichier=fopen($path,"r");
+           if(!$fichier=fopen($path,"r")){
+              /*  generationFichierScoreMoyen('../problemeNK/traces/'.$algos[$i].'/'.$instance);
+                $fichier=fopen($path,"r");*/
+                echo 'échec ouverture fichier';
+            }
      		$script.='data: [';
      		fseek($fichier, 0);
             //on récupère l'ensemble des points
@@ -40,7 +46,7 @@ $document->beginSection("corpPage", "formdiv");
      		}
             $script.=' ]}, ';
 		}
-    	//$script.='{ name: '.'"'.$algos[$i].'", ';
+        fclose($fichier);
      	$script.="]
         	});
     	});

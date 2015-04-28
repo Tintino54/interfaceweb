@@ -11,8 +11,7 @@ function calculMoyenne($tabMoy){
 
 function generationFichierScoreMoyen($instanceAlgo){
 	//création du fichier de sotckage des moyennes si il n'existe pas déjà
-	if(!$fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace','x')){
-		echo 'le fichier existe déjà';
+	if(!($fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace','wb',true))){
 		return 0;
 	}
 	fseek($fichier, 0);
@@ -48,17 +47,13 @@ function generationFichierScoreMoyen($instanceAlgo){
 		}
 		if($valueChanged){
 			fputs($fichier,$j.' '.calculMoyenne($tabMoy)."\r\n");
-			//fputs($fichier);
 		}
 		$j++;
 	}
+	fclose($fichier);
 	echo $j;
 }
-
-function calculScoreMoyenTotal($instanceAlgo){
-	generationFichierScoreMoyen($instanceAlgo);
-}
 $instanceAlgo='../problemeNK/traces/algo2/nk_128_2_0';
-calculScoreMoyenTotal($instanceAlgo);
+generationFichierScoreMoyen($instanceAlgo);
 
 ?>
