@@ -8,6 +8,7 @@ $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
 $instance=$_GET['var1'];
+echo $instance;
 $algos=scandir('problemeNK/traces');
 echo '<div id="container" style="width:100%; height:400px;"></div>';
 //script javascript générant le graphique
@@ -32,11 +33,12 @@ text: 'Fruit eaten'
 for ($i=2; $i < count($algos); $i++) {
 $script.='{ name: '.'"'.$algos[$i].'", ';
 $path='problemeNK/traces/'.$algos[$i].'/'.$instance.'/moyenne_algo_trace';
-if(!$fichier=fopen($path,"r")){
-/* generationFichierScoreMoyen('../problemeNK/traces/'.$algos[$i].'/'.$instance);
-$fichier=fopen($path,"r");*/
-echo 'échec ouverture fichier';
+if(!file_exists($path)){
+	$nf = 'problemeNK/traces/'.$algos[$i].'/'.$instance;
+	echo $nf;
+generationFichierScoreMoyen($nf);
 }
+$fichier=fopen($path,"r");
 $script.='data: [';
 fseek($fichier, 0);
 //on récupère l'ensemble des points
