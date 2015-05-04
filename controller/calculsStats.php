@@ -11,7 +11,7 @@ function calculMoyenne($tabMoy){
 
 function generationFichierScoreMoyen($instanceAlgo){
 	//création du fichier de sotckage des moyennes si il n'existe pas déjà
-	$fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace','w');
+	$fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace.txt','w');
 	if(!$fichier){
 		return 0;
 	}

@@ -1,3 +1,8 @@
+$(document).ready(function () {
+ 
+
+
+
 //valeur de base de la largeur de la ligne
 var baseLW = 2;
 //valeur de la largeur de la ligne en gras
@@ -44,11 +49,42 @@ for(var i=0; i<5 ; i++){
 	
 }
 
-	var gestionDonne = function(data){
-    	
+	$(function () {
+		$('#container').highcharts({
+		chart: {
+		type: 'line'
+		},
+		title: {
+		text: 'scores algorithmes'
+		},
+		xAxis: {
+		text: 'iteration'
+		},
+		yAxis: {
+		title: {
+		text: 'Fruit eaten'
+		}
+		},series: []
+		});
+	});
+	compteur = 1;
+	var gestionDonnees = function(data){
+		var chart = $('#container').highcharts();
+		var nom = "algo"+compteur;
+		var tableau = data.split('\n');
+		for(var i = 0; i<tableau.length-1; i++){
+			tableau[i] = tableau[i].split(' ');
+			for(var j = 0; j<tableau[i].length; j++){
+				tableau[i][j] = parseFloat(tableau[i][j]);
+			}
+		}
+		chart.addSeries({
+            name: nom,
+            data: tableau
+        });
+        compteur++;
     }
-
-    $.get("doc.txt", gestionDonne);
+    $.get("./../problemeNK/traces/algo1/nk_128_2_0/moyenne_algo_trace.txt", gestionDonnees);
 
     
 
@@ -63,6 +99,5 @@ for(var i=0; i<5 ; i++){
 		ctx.stroke();
 	}
 
-
-
+});
 

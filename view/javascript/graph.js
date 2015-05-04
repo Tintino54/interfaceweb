@@ -18,7 +18,9 @@ $('#container').highcharts({
 
 	"]
 	});
-	});
+});
+
+
 	var chart1; // globally available
 	$(function() {
 	chart1 = new Highcharts.StockChart({
@@ -33,4 +35,4 @@ $('#container').highcharts({
 		data: usdtoeur // predefined JavaScript array
 	}]
 	});
-});
+	});
