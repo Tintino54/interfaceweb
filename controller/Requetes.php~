@@ -1,71 +1,59 @@
 <?php
-		require_once("../model/Customer.php");
 
-		//se connecte à une BDD passée en paramètre
-		function connection($base){
-			$resConnect=mysql_connect("localhost","root","cochon6");
-			if($resConnect==false){
-				throw new Exception("erreur d'authentification mysql");
-			}
-			$resUse=mysql_query('use '.$base);
-			if($resUse==false){
-				throw new Exception("erreur connection base".$base);
-			}
-		}
+function executerRequetePreparee($requete,$param){
 
-		//retourne le client correspondant à l'id et le mdp passé
-		function authentification($login,$password){ 
-			connection("merch");
-			$query='select * from Client where mailClient='.'"'.$login.'"';
-			$query.=' and passwordClient='.'"'.$password.'"';
-			$res=mysql_query($query);
-			if(mysql_num_rows($res)==0){
-				throw new Exception('erreur authentification site');
-			}
-			$tab=mysql_fetch_row($res);
-			$customer=new Customer($tab);
-			return $customer;
-		}
+	$mysqli = new mysqli("localhost", "defaultUser", "s_user_447", "problemeInstance");
 
-		//affiche les n-uplets  d'une table passée en paramètres
-		function show($table){
-			connection("merch");
-			$res=mysql_query('select * from '.$table);
-			echo $res;
-			if($res==false){
-				echo 'exception';
-				throw new Exception('erreur affichage table '.$table);
-			}
-			echo 'ok';
-			$tab=mysql_fetch_array($res);
-			print_r($tab);
-		}
+	if ($mysqli->connect_errno) {
+	    echo "Echec lors de la connexion à MySQL : (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+	}
 
-		//ajoute un élément à la table passés en paramètres
-		function add($base,$element){
-			connection("merch");
-			$query='insert into '.$base.' values(';
-			for ($i=0;$i<count($element)-1;$i++) {
-				$query.='"'.$element[$i].'"'.',';
-			}
-			$query.='"'.$element[$i].'"'.')';
-			$res=mysql_query($query);
-			if($res==false){
-				throw new Exception('erreur ajout dans base'.$base);
-			}
-		}
+	//préparation de la requête
+	if (!($stmt = $mysqli->prepare($requete))) {
+   		echo "Echec de la préparation : (" . $mysqli->errno . ") " . $mysqli->error;
+	}
+	
+	//liage des paramètres
+	if(!call_user_func_array(array($stmt, "bind_param"),$param)){
+		echo "Echec lors du liage des paramètres : (" . $stmt->errno . ") " . $stmt->error;
+	}
 
-		function deleteProductCommande($idProduct,$idCommande){
-			connection("merch");
-			$query='delete from ListeProduit where ';
-			$query.='refCommande='.'"'.$idCommande.'" ';
-			$query.='and LibelleProduit='.'"'.$idProduct.'"';
-			$res=mysql_query($query);
-			if($res==false){
-				throw new Exception('erreur suppression produit '.$idProduct.'commande '.$idCommande);
-			}
-		}
-		
-		$tab=array('3','John','Doe','','','');
+	$data=$stmt->result_metadata();
 
+	$fields=array();
+	$out=array();
+	//on récupère les colonnes du résultat de la requête
+	while($field=$data->fetch_field()){
+		$fields[$field->name]=&$out[$field->name];
+	}
+	
+	//éxécution de la requête
+	if (!$stmt->execute()) {
+    	echo "Echec lors de l'exécution de la requête : (" . $stmt->errno . ") " . $stmt->error;
+	}
+
+	//récupération des résultats
+	if(!$stmt->store_result()){
+		echo "Echec lors de la récupération des résultats : (" . $stmt->errno . ") " . $stmt->error;	
+	}
+
+	//stockage des résulats dans les variables passées en paramètres
+	if(!call_user_func_array(array($stmt, "bind_result"), $fields)){
+		echo "Echec lors de l'affection des résultats : (" . $stmt->errno . ") " . $stmt->error;
+	}
+
+	//récupération de chaque lignes du résultat
+	$res=array();
+	while($stmt->fetch()){
+		array_push($res, $fields);
+	}
+
+	return $res;
+}
+
+$level=1;
+$id='test';
+$requete="SELECT name_user,surname_user FROM Users WHERE level_user=? AND id_user=?";
+$res=executerRequetePreparee($requete,array("ss",&$level,&$id));
+print_r($res);
 ?>
