@@ -1,6 +1,6 @@
 <?php
 
-require_once("./view/Tableau/Tableau.php");
+require_once("Tableau/Tableau.php");
 class Document {
 	
 	// default constructor : calls htmlHeader
@@ -13,6 +13,7 @@ class Document {
 	}
 	// start the <body> part of the page
 	public function begin($level=0){
+		session_start();
 		echo '<body>';
 	}
 	// display the <head> part of the page
@@ -38,11 +39,40 @@ class Document {
 	// header section
 	public function header(){
 		echo '<header id="mainHeader">';
+		echo '<table>';
+		echo '<tr>';
+		echo '<td>';
         echo '<div id="mainTitle">';
         echo '<h1>Résultats d\'instances de problèmes</h1>';
         echo '<h2>Avec outil de comparaison d\'algorithmes</h2>';
         echo '</div>';
-        echo '<img src="./view/American-Native3.gif" alt="logo" height="100" width="100" style = "float: right">';
+        echo '</td>';
+        echo '<td id="authentification" >';
+        echo 	'<form action="controller/authentification.php" method="post">';
+        echo 		'<fieldset>';
+        //l'utilisateur est connecté
+        if(!empty($_SESSION['user'])){
+       		echo 		'Bonjour '.$_SESSION['user']['surname_user'].' '.$_SESSION['user']['name_user'];
+        	echo 		'<input type="submit" value="deconnexion" >';
+        }
+        //l'utilisateur n'est pas connecté
+        else{
+	        echo 		'<label>login</label>';
+	        echo 		'<input name="login" type="text" size="10" />';
+	        echo 		'<br />';
+	        echo 		'<label>password</label>';
+	        echo 		'<input name="password" type="text" size="10" />';
+	        echo 		'<br/ >';
+	        echo 		'<input type="submit" value="connexion" >';
+    	}
+        echo 		'</fieldset>';
+        echo 	'</form>';
+        echo '</td>';
+        echo '<td>';
+        echo '<img src="./view/American-Native3.gif" alt="logo" height="100" width="100" style = "float: left">';
+        echo '</td>';
+        echo '</tr>';
+        echo '</table>';
 		echo '</header>';
 	}
 	
