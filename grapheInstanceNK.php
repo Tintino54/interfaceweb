@@ -1,73 +1,21 @@
  <?php
 require_once("view/Document.php");
-require_once("controller/calculsStats.php");
+require_once("creation.php");
+
 $document = new Document("view/style.css", "utf8");
 $document->addJavascript("view/javascript/jquery.js");
 $document->addJavascript("view/javascript/highcharts.js");
+$document->addJavascript("view/javascript/lines.js");
 $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
-$instance=$_GET['var1'];
-echo $instance;
-$algos=scandir('problemeNK/traces');
-echo '<div id="container" style="width:100%; height:400px;"></div>';
-//script javascript générant le graphique
-$script="<script>
-$(function () {
-$('#container').highcharts({
-chart: {
-type: 'line'
-},
-title: {
-text: 'score algorithmes'
-},
-xAxis: {
-text: 'iteration'
-},
-yAxis: {
-title: {
-text: 'Fruit eaten'
-}
-},series: [";
-//création des courbes pour chaque algo
-for ($i=2; $i < count($algos); $i++) {
-$script.='{ name: '.'"'.$algos[$i].'", ';
-$path='problemeNK/traces/'.$algos[$i].'/'.$instance.'/moyenne_algo_trace';
-if(!file_exists($path)){
-	$nf = 'problemeNK/traces/'.$algos[$i].'/'.$instance;
-	echo $nf;
-generationFichierScoreMoyen($nf);
-}
-$fichier=fopen($path,"r");
-$script.='data: [';
-fseek($fichier, 0);
-//on récupère l'ensemble des points
-while($ligne=fgets($fichier)){
-//ajout des coordonnées du point au graphe
-$script.='['.strstr($ligne,' ',true).', '.strstr($ligne,'0.').'],';
-}
-$script.=' ]}, ';
-	}
-fclose($fichier);
-$script.="]
-});
-});
-var chart1; // globally available
- $(function() {
-chart1 = new Highcharts.StockChart({
-chart: {
-renderTo: 'container'
-},
-rangeSelector: {
-selected: 1
-},
-series: [{
-name: 'USD to EUR',
-data: usdtoeur // predefined JavaScript array
-}]
-});
-});
-</script>";echo $script;
- $document->endSection();
-$document->end();
-?> 
+
+
+
+echo '<div id="container" style="width:100%; height:400px;"></div>
+		<canvas id="myCanvas" width="800" height="400">
+			Your browser does not support the HTML5 canvas tag.
+		</canvas> ';
+ 	$document->endSection();
+	$document->end();
+?>

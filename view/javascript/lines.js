@@ -62,16 +62,18 @@ for(var i=0; i<5 ; i++){
 		},
 		yAxis: {
 		title: {
-		text: 'Fruit eaten'
+		text: 'Scores'
 		}
 		},series: []
 		});
 	});
-	compteur = 1;
+
+	var nomAlgo = "";
+
 	var gestionDonnees = function(data){
 		var chart = $('#container').highcharts();
-		var nom = "algo"+compteur;
 		var tableau = data.split('\n');
+		alert(tableau[tableau.length-2]);
 		for(var i = 0; i<tableau.length-1; i++){
 			tableau[i] = tableau[i].split(' ');
 			for(var j = 0; j<tableau[i].length; j++){
@@ -79,12 +81,23 @@ for(var i=0; i<5 ; i++){
 			}
 		}
 		chart.addSeries({
-            name: nom,
+			name: nomAlgo,
             data: tableau
         });
-        compteur++;
     }
-    $.get("./../problemeNK/traces/algo1/nk_128_2_0/moyenne_algo_trace.txt", gestionDonnees);
+
+    //récupération des paramètres
+    var param = window.location.href;
+    param = (window.location.href).split('?');
+    param = param[1];
+    var link = "./generation.php?"+param;
+    $.get(link, function(donnee){
+    	alert(donnee.nomInstance);
+    	for(var i =0; i<donnee['nomAlgo'].length; i++){
+    		nomAlgo = donnee['nomAlgo'][i];
+    		$.get("./problemeNK/traces/"+donnee['nomAlgo'][i]+"/"+donnee.nomInstance+"/moyenne_algo_trace.txt", gestionDonnees);
+    	}
+    } , "json");
 
     
 

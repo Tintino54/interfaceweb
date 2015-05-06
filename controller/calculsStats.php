@@ -54,7 +54,4 @@ function generationFichierScoreMoyen($instanceAlgo){
 	fclose($fichier);
 	echo $j;
 }
-/*$instanceAlgo='../problemeNK/traces/algo2/nk_512_8_0';
-generationFichierScoreMoyen($instanceAlgo);*/
-
 ?>
