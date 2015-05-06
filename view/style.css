@@ -16,6 +16,14 @@ a{
 	text-decoration:none;
 }
 
+label{
+	display:inline-block;
+}
+
+input{
+	display:inline-block;
+}
+
 #mainHeader{
 	background-color: #959BAF;
 	color: white;
@@ -28,8 +36,7 @@ a{
 
 #mainTitle{
 	display: inline-block;
-	width: 75%;
-	font-size: 1.2em;
+	font-size: 1.0em;
 	font-style: italic;
 }
 
@@ -51,6 +58,10 @@ a{
 
 #tabs a{
 	color: white;
+}
+
+#authentification input{
+	float:right;
 }
 
 

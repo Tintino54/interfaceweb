@@ -50,10 +50,4 @@ function executerRequetePreparee($requete,$param){
 
 	return $res;
 }
-
-$level=1;
-$id='test';
-$requete="SELECT name_user,surname_user FROM Users WHERE level_user=? AND id_user=?";
-$res=executerRequetePreparee($requete,array("ss",&$level,&$id));
-print_r($res);
 ?>
