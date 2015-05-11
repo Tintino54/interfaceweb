@@ -19,16 +19,6 @@ var colorTables = new Array("red","blue","yellow","green","orange","purple");
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
-
-/*function MyLine () {
-    this.portions = new Array();
-    this.setPortion = setLinePortion;
-}
-
-function setLinePortion(){
-
-}*/
-
 for(var i=0; i<5 ; i++){
 	//trace ligne de base
 	ctx.beginPath();
@@ -52,7 +42,8 @@ for(var i=0; i<5 ; i++){
 	$(function () {
 		$('#container').highcharts({
 		chart: {
-		type: 'line'
+		type: 'line',
+		zoomType: "xy"
 		},
 		title: {
 		text: 'scores algorithmes'
@@ -68,12 +59,11 @@ for(var i=0; i<5 ; i++){
 		});
 	});
 
-	var nomAlgo = "";
-
+	var nomAlgo = new Array();
+	var a = 0;
 	var gestionDonnees = function(data){
 		var chart = $('#container').highcharts();
 		var tableau = data.split('\n');
-		alert(tableau[tableau.length-2]);
 		for(var i = 0; i<tableau.length-1; i++){
 			tableau[i] = tableau[i].split(' ');
 			for(var j = 0; j<tableau[i].length; j++){
@@ -81,9 +71,10 @@ for(var i=0; i<5 ; i++){
 			}
 		}
 		chart.addSeries({
-			name: nomAlgo,
+			name: nomAlgo[a],
             data: tableau
         });
+        a++;
     }
 
     //récupération des paramètres
@@ -92,14 +83,11 @@ for(var i=0; i<5 ; i++){
     param = param[1];
     var link = "./generation.php?"+param;
     $.get(link, function(donnee){
-    	alert(donnee.nomInstance);
     	for(var i =0; i<donnee['nomAlgo'].length; i++){
-    		nomAlgo = donnee['nomAlgo'][i];
+    		nomAlgo[nomAlgo.length] = donnee['nomAlgo'][i];
     		$.get("./problemeNK/traces/"+donnee['nomAlgo'][i]+"/"+donnee.nomInstance+"/moyenne_algo_trace.txt", gestionDonnees);
     	}
     } , "json");
-
-    
 
 	//met en gras d'un endroit à un autre
 	function engraisse(id, start, end){

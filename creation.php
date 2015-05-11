@@ -6,11 +6,13 @@ $algos=scandir($np.'/traces');
 
 	//création des courbes pour chaque algo
 	for ($i=2; $i < count($algos); $i++) {
-		$path='problemeNK/traces/'.$algos[$i].'/'.$instance.'/moyenne_algo_trace.txt';
+		$path=$np.'/traces/'.$algos[$i].'/'.$instance.'/moyenne_algo_trace.txt';
 		if(!file_exists($path)){
-			$nf = 'problemeNK/traces/'.$algos[$i].'/'.$instance;
+			$nf = $np.'/traces/'.$algos[$i].'/'.$instance;
 			generationFichierScoreMoyen($nf);
 		}
 	}
+
+	//$moyennes = glob($np."/traces/*/*/moyenne_algo_trace.txt");
 
 ?>
