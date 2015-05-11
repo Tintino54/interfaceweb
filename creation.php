@@ -12,7 +12,8 @@ $algos=scandir($np.'/traces');
 			generationFichierScoreMoyen($nf);
 		}
 	}
-
 	//$moyennes = glob($np."/traces/*/*/moyenne_algo_trace.txt");
-
+	//for($i=0; $i< count($moyennes); $i++){
+	//	echo $moyennes[$i]."<br>";
+	//}
 ?>
