@@ -60,10 +60,6 @@ input{
 	color: white;
 }
 
-#authentification input{
-	float:right;
-}
-
 
 #menu {
 	display: inline-block;
@@ -111,4 +107,16 @@ table {
 #titreProbleme{
 	color:white;
 	text-align: center;
+}
+
+label { 
+	display: inline-block; width: 80px; text-align: left;
+}​
+
+#loginLabel, #passwordLabel{
+	display: inline-block;
+}
+
+fieldset{
+	padding: 2px;
 }

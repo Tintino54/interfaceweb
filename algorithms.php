@@ -5,16 +5,16 @@ $document->addJavascript("view/javascript/chargement.js");
 $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
-$var = $_GET['var1'];
+$var1 = $_GET['var1'];
 
-echo '<h1 id="titreProbleme">'.$var.'</h1>';
+echo '<h1 id="titreProbleme">'.$var1.'</h1>';
 
 //liste des instances avec le lien des téléchargements
-$instances=$var.'/instancesNK'; 
+$instances=$var1.'/instancesNK'; 
 $tabDir=scandir($instances);
 echo '<ul>';
 for($i=2;$i<count($tabDir);$i++) {
-	$page='grapheInstanceNK.php?var1='.$tabDir[$i];
+	$page='grapheInstanceNK.php?var1='.$tabDir[$i].'&var2='.$var1;
 	echo '<li>';
 		echo '<a href="'.$page.'">'.$tabDir[$i].'</a>';
 		echo '<a href='.'"'.'downloadInstanceNK.php?var1='.$instances.'/'.$tabDir[$i].'"'.'>';

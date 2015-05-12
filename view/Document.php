@@ -57,19 +57,21 @@ class Document {
         }
         //l'utilisateur n'est pas connecté
         else{
+        	echo        '<div id="loginLabel">';
 	        echo 		'<label>login</label>';
 	        echo 		'<input name="login" type="text" size="10" />';
-	        echo 		'<br />';
+	        echo        '</div>';
+	        echo        '<div id="passwordLabel">';
 	        echo 		'<label>password</label>';
 	        echo 		'<input name="password" type="text" size="10" />';
-	        echo 		'<br/ >';
+	        echo        '</div>';
 	        echo 		'<input type="submit" value="connexion" >';
     	}
         echo 		'</fieldset>';
         echo 	'</form>';
         echo '</td>';
         echo '<td>';
-        echo '<img src="./view/American-Native3.gif" alt="logo" height="100" width="100" style = "float: left">';
+        echo '<a href="index.php"><img src="./view/American-Native3.gif" alt="logo" height="100" width="100" style = "float: left"></a>';
         echo '</td>';
         echo '</tr>';
         echo '</table>';
