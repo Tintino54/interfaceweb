@@ -1,11 +1,14 @@
 <?php
-/* 
+/*
 Compare les valeurs de deux algorithmes pour une iteration
 sur l'ensemble des traces
 si l'algo 1 domine l'algo 2 renvoie 1
 si l'algo 2 domine l'ago 2 renvoie 2
 sinon renvoie 0
 */
+
+$instance=$_GET['var1'];
+
 function comparaison($tab1,$tab2){
 	$test_binomial=52;
 	$taille=count($tab1);
@@ -34,11 +37,11 @@ function comparaison($tab1,$tab2){
 	}
 }
 
-/* Sur une instance donnée, compare deux algorithmes et retourne un ensemble d'intervalles 
+/* Sur une instance donnée, compare deux algorithmes et retourne un ensemble d'intervalles
 sous format Json, correspondants aux zones de dominance statistique */
 function calculDominance($instance,$algo1,$algo2){
-	$tabResultat["algo1"]=array();
-	$tabResultat["algo2"]=array();
+	//$tabResultat["algo1"]=array();
+	//$tabResultat["algo2"]=array();
 
 	$indiceAlgo1=0;
 	$indiceAlgo2=0;
@@ -51,8 +54,8 @@ function calculDominance($instance,$algo1,$algo2){
 		$linesAlgo1[$i-2]=file('problemeNK/traces/'.$algo1.'/'.$instance.'/'.$tracesAlgo1[$i]);
 		$linesAlgo2[$i-2]=file('problemeNK/traces/'.$algo2.'/'.$instance.'/'.$tracesAlgo2[$i]);
 	}
- 
- 	/*initialisation des tableaux currenValuesAlgo1, currentValuesAlgo2 à 
+
+ 	/*initialisation des tableaux currenValuesAlgo1, currentValuesAlgo2 à
  	l'itération numérotée 0 */
 	$taille=count($linesAlgo1);
 	for($i=0;$i<$taille;$i++){
@@ -66,7 +69,7 @@ function calculDominance($instance,$algo1,$algo2){
 
 	/* Tant qu'on a pas atteint la dernière itération, on stocke l'ensemble des scores contenus
 	dans les fichiers traces pour l'itération courante dans le tableau currentValuesAlgo1
-	pour l'algorithme 1, currentValuesAlgo2 pour l'algorithme 2 et on compare ces valeurs 
+	pour l'algorithme 1, currentValuesAlgo2 pour l'algorithme 2 et on compare ces valeurs
 	à l'aide de la fonction comparaison ci-dessus */
 	while(!$termine){
 		$termine=true;
@@ -100,6 +103,7 @@ function calculDominance($instance,$algo1,$algo2){
 			}
 			else{
 				$indiceAlgo1++;
+                $tabResultat["algo1"][$indiceAlgo1]=new stdClass();
 				$tabResultat["algo1"][$indiceAlgo1]->debut=$iteration;
 				$tabResultat["algo1"][$indiceAlgo1]->fin=$iteration;
 			}
@@ -112,29 +116,34 @@ function calculDominance($instance,$algo1,$algo2){
 			}
 			else{
 				$indiceAlgo2++;
+                $tabResultat["algo2"][$indiceAlgo2]=new stdClass();
 				$tabResultat["algo2"][$indiceAlgo2]->debut=$iteration;
-				$tabResultat["algo2"][$indiceAlgo2]->debut=$iteration;
+				$tabResultat["algo2"][$indiceAlgo2]->fin=$iteration;
 			}
 			$valeurPrecedente=2;
 		}
 
 		else{
 			if($valeurPrecedente==-1){
+                $tabResultat["algo2"][$indiceAlgo2]=new stdClass();
 				$tabResultat["algo2"][$indiceAlgo2]->debut=$iteration;
 				$tabResultat["algo2"][$indiceAlgo2]->fin=$iteration;
+                $tabResultat["algo1"][$indiceAlgo1]=new stdClass();
 				$tabResultat["algo1"][$indiceAlgo1]->debut=$iteration;
 				$tabResultat["algo1"][$indiceAlgo1]->fin=$iteration;
 
 			}
 			else if($valeurPrecedente==1){
-				$tabResultat["algo1"][$indiceAlgo1]->fin++;	
+				$tabResultat["algo1"][$indiceAlgo1]->fin++;
 				$indiceAlgo2++;
+                $tabResultat["algo2"][$indiceAlgo2]=new stdClass();
 				$tabResultat["algo2"][$indiceAlgo2]->debut=$iteration;
 				$tabResultat["algo2"][$indiceAlgo2]->fin=$iteration;
 			}
 			else if($valeurPrecedente==2){
 				$tabResultat["algo2"][$indiceAlgo2]->fin++;
 				$indiceAlgo1++;
+                $tabResultat["algo1"][$indiceAlgo1]=new stdClass();
 				$tabResultat["algo1"][$indiceAlgo1]->debut=$iteration;
 				$tabResultat["algo1"][$indiceAlgo1]->fin=$iteration;
 			}
@@ -146,7 +155,8 @@ function calculDominance($instance,$algo1,$algo2){
 		}
 		$iteration++;
 	}
-	echo json_encode($tabResultat);
+   echo json_encode($tabResultat);
+
 }
-calculDominance("nk_128_8_0","algo1","algo2");
+calculDominance($instance,"algo1","algo2");
 ?>

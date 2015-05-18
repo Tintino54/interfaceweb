@@ -1,43 +1,73 @@
+var donneesLignes;
+var nbIt;
+
+function g(data){
+    //alert(data['algo1'][0]['fin']);
+    donneesLignes = data;
+    nbIt = Math.max(data['algo1'][data['algo1'].length-1]['fin'],  data['algo2'][data['algo2'].length-1]['fin']);
+}
+
+//récupération des paramètres
+var param = window.location.href;
+param = (window.location.href).split('?');
+param = param[1];
+var link = "./cds.php?"+param;
+jQuery.ajax({
+    type: "GET",
+    url:    link,
+    success: g,
+    dataType: "json",
+    async:   false
+});
 $(document).ready(function () {
- 
-
-
-
 //valeur de base de la largeur de la ligne
 var baseLW = 2;
 //valeur de la largeur de la ligne en gras
 var increasedLW = 5;
-//valeur de la marge à gauche
-var marginLeft = 10;
+//valeur des marges
+var marginLeft = 35;
+    var marginRight = 20;
 //longueur des lignes
-var lenghtLine = 600;
+var lenghtLine = $("#lignes").width();
 //espacement en hauteur des lignes
 var marginTop = 17;
 
-var colorTables = new Array("red","blue","yellow","green","orange","purple");
+var colorTables = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'];
 
 var c = document.getElementById("myCanvas");
+    c.width =  $("#lignes").width();
+    c.height = 200;
 var ctx = c.getContext("2d");
 
-for(var i=0; i<5 ; i++){
-	//trace ligne de base
-	ctx.beginPath();
-	//récupérer la couleur depuis l'autre javascript
-	ctx.strokeStyle = colorTables[i];
-	ctx.moveTo(marginLeft, marginTop*(i+1));
-	ctx.lineTo(lenghtLine, marginTop*(i+1));
-	ctx.lineWidth = baseLW;
-	ctx.closePath();
-	ctx.stroke();
+
+    var dessineLigne = function(id) {
+        //plus tard, gérer l'augmentation de la taille du canvas avec l'ajout de lignes
+        //trace ligne de base
+        ctx.beginPath();
+        //récupérer la couleur depuis l'autre javascript
+        ctx.strokeStyle = colorTables[id];
+        ctx.moveTo(marginLeft, marginTop * (id + 1));
+        ctx.lineTo(lenghtLine-marginRight, marginTop * (id + 1));
+        ctx.lineWidth = baseLW;
+        ctx.closePath();
+        ctx.stroke();
+    }
 
 
-	//trace le gras
+    function convertLength(val, nbIteration, tailleC){
+        return (val/nbIteration)*tailleC;
+    }
 
-	//à faire en boucle
-	//à calculer
-	engraisse(i, 15, 60);
-	
-}
+    //met en gras d'un endroit à un autre
+    function engraisse(id, start, end){
+        ctx.strokeStyle = colorTables[id];
+        ctx.beginPath();
+        ctx.moveTo(start, marginTop*(id+1));
+        ctx.lineTo(end, marginTop*(id+1));
+        ctx.lineWidth = increasedLW;
+        ctx.closePath();
+        ctx.stroke();
+    }
 
 	//définition du graphique
 	$(function () {
@@ -55,7 +85,7 @@ for(var i=0; i<5 ; i++){
 			yAxis: {
 				title: {
 					text: 'Scores'
-				},
+				}
 			},series: []
 		});
 	});
@@ -69,6 +99,7 @@ for(var i=0; i<5 ; i++){
 
 	//fonction du traitement des données pour générer graphiquement les courbes
 	var gestionDonnees = function(data){
+       var tailleCanvas = $("#lignes").width()-marginLeft-marginRight;
 		//récupération du graphique
 		var chart = $('#container').highcharts();
 		//data correspond à une grande chaine de caractères, chaque ligne représente une abscisse et une ordonnée
@@ -93,6 +124,18 @@ for(var i=0; i<5 ; i++){
 			name: nomAlgo[a],
             data: tableau
         });
+
+
+
+        dessineLigne(a);
+
+        for(var i = 0; i<donneesLignes[nomAlgo[a]].length; i++) {
+            var debut = convertLength(donneesLignes[nomAlgo[a]][i]['debut'],nbIt , tailleCanvas);
+            var fin = convertLength(donneesLignes[nomAlgo[a]][i]['fin'],nbIt , tailleCanvas);
+            alert(tailleCanvas);
+            alert(fin);
+            engraisse(a, debut, fin);
+        }
         a++;
     }
 
@@ -113,40 +156,39 @@ for(var i=0; i<5 ; i++){
     //fonction qui prend chaque algo pour lire les données dans le fichier pour générer les courbes
     var gestionInstance = function(donnee){
     	//pour chaqe algo
-    	for(var i =0; i<donnee['nomAlgo'].length; i++){
-    		nomAlgo[nomAlgo.length] = donnee['nomAlgo'][i];
-    		 jQuery.ajax({
-        		 url:   "./problemeNK/traces/"+donnee['nomAlgo'][i]+"/"+donnee.nomInstance+"/moyenne_algo_trace.txt",
-         		success: gestionDonnees,
-         		//permet que les actions se fassent à tour de rôle et non simultanément
-         		async: false
-    		});      		  
-    	}
-    	//prolongation des courbes
-    	prolongationCourbes();
+    	for(var i =0; i<donnee['nomAlgo'].length; i++) {
+            nomAlgo[nomAlgo.length] = donnee['nomAlgo'][i];
+            jQuery.ajax({
+                url: "./problemeNK/traces/" + donnee['nomAlgo'][i] + "/" + donnee.nomInstance + "/moyenne_algo_trace.txt",
+                success: gestionDonnees,
+                //permet que les actions se fassent à tour de rôle et non simultanément
+                async: false
+            });
+            //prolongation des courbes
+            prolongationCourbes();
+        }
     }
 
-    //récupération des paramètres
-    var param = window.location.href;
-    param = (window.location.href).split('?');
-    param = param[1];
-    var link = "./generation.php?"+param;
-    jQuery.ajax({
-         url:    link,
-         success: gestionInstance,
-         dataType: "json",
-         async:   true
-    });
 
-	//met en gras d'un endroit à un autre
-	function engraisse(id, start, end){
-		ctx.strokeStyle = colorTables[id];
-		ctx.beginPath();
-		ctx.moveTo(start, marginTop*(id+1));
-		ctx.lineTo(end, marginTop*(id+1));
-		ctx.lineWidth = increasedLW;
-		ctx.closePath();
-		ctx.stroke();
-	}
+    //récupération des paramètres
+ var param = window.location.href;
+ param = (window.location.href).split('?');
+ param = param[1];
+ var link = "./generation.php?"+param;
+ jQuery.ajax({
+ url:    link,
+ success: gestionInstance,
+ dataType: "json",
+ async:   true
+ });
+
+
+
+
+
+
+
+
 
 });
+

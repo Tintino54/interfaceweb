@@ -120,3 +120,8 @@ label {
 fieldset{
 	padding: 2px;
 }
+
+#myCanvas{
+    margin-top: 30px;
+    background-color: #ffffff;
+}
