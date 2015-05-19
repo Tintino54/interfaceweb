@@ -16,7 +16,6 @@ $document->header();
 $document->beginSection("corpPage", "formdiv");
 
 $document->writeProblems();
-$document->chart();
 $document->end();
 $document->endSection();
 ?>
