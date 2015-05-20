@@ -10,10 +10,8 @@ function g(data){
 //récupération des paramètres
 var param = window.location.href;
 param = (window.location.href).split('?');
-param = param[1];
-param = param.split('&');
-param = param[0];
-param = param.split('=');
+param = param[1].split('&');
+param = param[1].split('=');
 param = param[1];
 var link = "./problemeNK/dominance/"+param;
 jQuery.getJSON(link, g);

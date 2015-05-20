@@ -7,7 +7,7 @@ si l'algo 2 domine l'ago 2 renvoie 2
 sinon renvoie 0
 */
 
-$instance=$_GET['var1'];
+$instance=$_GET['inst'];
 
 function comparaison($tab1,$tab2){
 	$test_binomial=52;

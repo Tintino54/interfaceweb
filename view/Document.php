@@ -93,7 +93,7 @@ class Document {
 		$nomProbleme = "problemeNK";
 		$description = "blabla bla blalalblalblalbal lbla blbla blalblbla blablb bla";
 		$tableau = new Tableau("problemes", "prob", 5);
-		$ligne = new Ligne('<h5><a href="./algorithms.php?var1='.$nomProbleme.'">'.$nomProbleme.'</a></h5><p>'.$description.'</p>');
+		$ligne = new Ligne('<h5><a href="./algorithms.php?pb='.$nomProbleme.'">'.$nomProbleme.'</a></h5><p>'.$description.'</p>');
 		$tableau->addLigne($ligne);
 		for($i = 0; $i<12; $i++){
 			$probleme = new Ligne('<h5><a>titre problème</a></h5><p>description</p>');

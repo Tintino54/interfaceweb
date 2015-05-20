@@ -1,7 +1,7 @@
 <?php
 require_once("controller/calculsStats.php");
-$instance=$_GET['var1'];
-$np = "problemeNK";
+$instance=$_GET['inst'];
+$np = $_GET['pb'];
 $algos=scandir($np.'/traces');
 
 		$algorithmes = array();

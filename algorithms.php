@@ -5,7 +5,7 @@ $document->addJavascript("view/javascript/chargement.js");
 $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
-$var1 = $_GET['var1'];
+$var1 = $_GET['pb'];
 
 echo '<h1 id="titreProbleme">'.$var1.'</h1>';
 
@@ -14,10 +14,10 @@ $instances=$var1.'/instancesNK';
 $tabDir=scandir($instances);
 echo '<ul>';
 for($i=2;$i<count($tabDir);$i++) {
-	$page='grapheInstanceNK.php?var1='.$tabDir[$i].'&var2='.$var1;
+	$page='grapheInstance.php?pb='.$var1.'&inst='.$tabDir[$i];
 	echo '<li>';
 		echo '<a href="'.$page.'">'.$tabDir[$i].'</a>';
-		echo '<a href='.'"'.'downloadInstanceNK.php?var1='.$instances.'/'.$tabDir[$i].'"'.'>';
+		echo '<a href='.'"'.'downloadInstance.php?var1='.$instances.'/'.$tabDir[$i].'"'.'>';
 		echo '<img src="view/ressources/downArrow.gif" height="20" width="20">'; 
 		echo '</a>';
 		echo '</li>';
