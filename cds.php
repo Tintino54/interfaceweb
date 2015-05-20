@@ -7,7 +7,7 @@ si l'algo 2 domine l'ago 2 renvoie 2
 sinon renvoie 0
 */
 
-$instance=$_GET['var1'];
+//$instance=$_GET['var1'];
 
 function comparaison($tab1,$tab2){
 	$test_binomial=52;
@@ -38,7 +38,7 @@ function comparaison($tab1,$tab2){
 }
 
 /* Sur une instance donnée, compare deux algorithmes et retourne un ensemble d'intervalles
-sous format Json, correspondants aux zones de dominance statistique */
+sous format Json dans un fichier , correspondants aux zones de dominance statistique */
 function calculDominance($instance,$algo1,$algo2){
 	//$tabResultat["algo1"]=array();
 	//$tabResultat["algo2"]=array();
@@ -66,6 +66,12 @@ function calculDominance($instance,$algo1,$algo2){
 	$termine=false;
 	$valeurPrecedente=-1;
 	$iteration=0;
+
+	if(file_exists("problemeNK/dominance/".$instance)){
+		return 0;
+	}
+	
+	$fichierResultat=fopen("problemeNK/dominance/".$instance,"w");
 
 	/* Tant qu'on a pas atteint la dernière itération, on stocke l'ensemble des scores contenus
 	dans les fichiers traces pour l'itération courante dans le tableau currentValuesAlgo1
@@ -155,8 +161,8 @@ function calculDominance($instance,$algo1,$algo2){
 		}
 		$iteration++;
 	}
-   echo json_encode($tabResultat);
+   fputs($fichierResultat,json_encode($tabResultat));
 
 }
-calculDominance($instance,"algo1","algo2");
+calculDominance("nk_128_8_0","algo1","algo2");
 ?>
