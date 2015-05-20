@@ -1,5 +1,6 @@
 <?php
 require_once("controller/calculsStats.php");
+require_once("cds.php");
 $instance=$_GET['var1'];
 $np = "problemeNK";
 $algos=scandir($np.'/traces');
@@ -12,8 +13,5 @@ $algos=scandir($np.'/traces');
 			generationFichierScoreMoyen($nf);
 		}
 	}
-	//$moyennes = glob($np."/traces/*/*/moyenne_algo_trace.txt");
-	//for($i=0; $i< count($moyennes); $i++){
-	//	echo $moyennes[$i]."<br>";
-	//}
+
 ?>

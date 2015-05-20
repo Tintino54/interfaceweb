@@ -11,14 +11,12 @@ function g(data){
 var param = window.location.href;
 param = (window.location.href).split('?');
 param = param[1];
-var link = "./cds.php?"+param;
-jQuery.ajax({
-    type: "GET",
-    url:    link,
-    success: g,
-    dataType: "json",
-    async:   false
-});
+param = param.split('&');
+param = param[0];
+param = param.split('=');
+param = param[1];
+var link = "./problemeNK/dominance/"+param;
+jQuery.getJSON(link, g);
 $(document).ready(function () {
 //valeur de base de la largeur de la ligne
     var baseLW = 2;
