@@ -2,7 +2,7 @@
 require_once("controller/calculsStats.php");
 $instance=$_GET['inst'];
 $np = $_GET['pb'];
-$algos=scandir($np.'/traces');
+$algos=scandir('problemes/'.$np.'/traces');
 
 		$algorithmes = array();
 		for ($i=2; $i < count($algos); $i++) {

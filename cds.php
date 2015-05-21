@@ -8,6 +8,7 @@ sinon renvoie 0
 */
 
 $instance=$_GET['inst'];
+$prob=$_GET['pb'];
 
 function comparaison($tab1,$tab2){
 	$test_binomial=52;
@@ -39,7 +40,7 @@ function comparaison($tab1,$tab2){
 
 /* Sur une instance donnée, compare deux algorithmes et retourne un ensemble d'intervalles
 sous format Json dans un fichier , correspondants aux zones de dominance statistique */
-function calculDominance($instance,$algo1,$algo2){
+function calculDominance($instance, $prob, $algo1,$algo2){
 	//$tabResultat["algo1"]=array();
 	//$tabResultat["algo2"]=array();
 
@@ -48,11 +49,11 @@ function calculDominance($instance,$algo1,$algo2){
 
 	/* Ouverture des fichiers de traces des algorithmes et stockage dans un tableau de lignes
 	stockant l'ensemble des lignes des fichiers de traces */
-	$tracesAlgo1=scandir('problemeNK/traces/'.$algo1.'/'.$instance);
-	$tracesAlgo2=scandir('problemeNK/traces/'.$algo2.'/'.$instance);
+	$tracesAlgo1=scandir("problemes/".$prob.'/traces/'.$algo1.'/'.$instance);
+	$tracesAlgo2=scandir("problemes/".$prob.'/traces/'.$algo2.'/'.$instance);
 	for($i=2;$i<count($tracesAlgo1);$i++){
-		$linesAlgo1[$i-2]=file('problemeNK/traces/'.$algo1.'/'.$instance.'/'.$tracesAlgo1[$i]);
-		$linesAlgo2[$i-2]=file('problemeNK/traces/'.$algo2.'/'.$instance.'/'.$tracesAlgo2[$i]);
+		$linesAlgo1[$i-2]=file("problemes/".$prob.'/traces/'.$algo1.'/'.$instance.'/'.$tracesAlgo1[$i]);
+		$linesAlgo2[$i-2]=file("problemes/".$prob.'/traces/'.$algo2.'/'.$instance.'/'.$tracesAlgo2[$i]);
 	}
 
  	/*initialisation des tableaux currenValuesAlgo1, currentValuesAlgo2 à
@@ -67,11 +68,11 @@ function calculDominance($instance,$algo1,$algo2){
 	$valeurPrecedente=-1;
 	$iteration=0;
 
-	if(file_exists("problemeNK/dominance/".$instance)){
+	if(file_exists("problemes/".$prob."/dominance/".$instance)){
 		return 0;
 	}
 	
-	$fichierResultat=fopen("problemeNK/dominance/".$instance,"w");
+	$fichierResultat=fopen("problemes/".$prob."/dominance/".$instance,"w");
 
 	/* Tant qu'on a pas atteint la dernière itération, on stocke l'ensemble des scores contenus
 	dans les fichiers traces pour l'itération courante dans le tableau currentValuesAlgo1
@@ -164,5 +165,5 @@ function calculDominance($instance,$algo1,$algo2){
    fputs($fichierResultat,json_encode($tabResultat));
 
 }
-calculDominance($instance,"algo1","algo2");
+calculDominance($instance, $probleme,"algo1","algo2");
 ?>

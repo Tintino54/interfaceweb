@@ -8,13 +8,13 @@ function g(data){
 }
 
 //récupération des paramètres
-var param = window.location.href;
+/*var param = window.location.href;
 param = (window.location.href).split('?');
 param = param[1].split('&');
 param = param[1].split('=');
 param = param[1];
 var link = "./problemeNK/dominance/"+param;
-jQuery.getJSON(link, g);
+jQuery.getJSON(link, g);*/
 $(document).ready(function () {
 //valeur de base de la largeur de la ligne
     var baseLW = 2;
@@ -95,6 +95,7 @@ $(document).ready(function () {
 
     //fonction du traitement des données pour générer graphiquement les courbes
     var gestionDonnees = function(data){
+
         var tailleCanvas = $("#lignes").width()-marginLeft-marginRight;
         //récupération du graphique
         var chart = $('#container').highcharts();
@@ -121,16 +122,15 @@ $(document).ready(function () {
             data: tableau
         });
 
-
-
         dessineLigne(a);
 
-        for(var i = 0; i<donneesLignes[nomAlgo[a]].length; i++) {
+        /*for(var i = 0; i<donneesLignes[nomAlgo[a]].length; i++) {
             var debut = convertLength(donneesLignes[nomAlgo[a]][i]['debut'],nbIt , tailleCanvas);
             var fin = convertLength(donneesLignes[nomAlgo[a]][i]['fin'],nbIt , tailleCanvas);
             engraisse(a, debut, fin);
-        }
+        }*/
         a++;
+
     }
 
     var prolongationCourbes = function(){
@@ -153,7 +153,7 @@ $(document).ready(function () {
         for(var i =0; i<donnee['nomAlgo'].length; i++) {
             nomAlgo[nomAlgo.length] = donnee['nomAlgo'][i];
             jQuery.ajax({
-                url: "./problemeNK/traces/" + donnee['nomAlgo'][i] + "/" + donnee.nomInstance + "/moyenne_algo_trace.txt",
+                url: "./problemes/"+donnee['nomProbleme']+"/traces/" + donnee['nomAlgo'][i] + "/" + donnee['nomInstance'] + "/moyenne_algo_trace.txt",
                 success: gestionDonnees,
                 //permet que les actions se fassent à tour de rôle et non simultanément
                 async: false

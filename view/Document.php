@@ -90,13 +90,10 @@ class Document {
 	}
 
 	public function writeProblems(){
-		$nomProbleme = "problemeNK";
-		$description = "blabla bla blalalblalblalbal lbla blbla blalblbla blablb bla";
+        $problemes = scandir('problemes');
 		$tableau = new Tableau("problemes", "prob", 5);
-		$ligne = new Ligne('<h5><a href="./algorithms.php?pb='.$nomProbleme.'">'.$nomProbleme.'</a></h5><p>'.$description.'</p>');
-		$tableau->addLigne($ligne);
-		for($i = 0; $i<12; $i++){
-			$probleme = new Ligne('<h5><a>titre problème</a></h5><p>description</p>');
+		for($i = 2; $i<count($problemes); $i++){
+            $probleme = new Ligne('<h5><a href="./algorithms.php?pb='.$problemes[$i].'">'.$problemes[$i].'</a></h5><p>description</p>');
 			$tableau->addLigne($probleme);
 		}
 		$tableau->generate();

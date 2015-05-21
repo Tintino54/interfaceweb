@@ -10,7 +10,7 @@ $var1 = $_GET['pb'];
 echo '<h1 id="titreProbleme">'.$var1.'</h1>';
 
 //liste des instances avec le lien des téléchargements
-$instances=$var1.'/instancesNK'; 
+$instances='problemes/'.$var1.'/instances';
 $tabDir=scandir($instances);
 echo '<ul>';
 for($i=2;$i<count($tabDir);$i++) {

@@ -11,14 +11,14 @@ function calculMoyenne($tabMoy){
 
 function generationFichierScoreMoyen($instanceAlgo){
 	//création du fichier de sotckage des moyennes si il n'existe pas déjà
-	$fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace.txt','w');
-	if(!$fichier){
-		return 0;
-	}
-	fseek($fichier, 0);
+
+
 	$total=0;
 	$traces=scandir($instanceAlgo);
 	$lignes=array();
+    if(file_exists($instanceAlgo.'/'.'moyenne_algo_trace.txt')){
+        return 0;
+    }
 
 	//ouverture des traces stockées dans le tableau lignes
 	for($i=2;$i<count($traces);$i++){
@@ -28,6 +28,10 @@ function generationFichierScoreMoyen($instanceAlgo){
 	//initialisation du tableau aux valeurs initiales
 	$taille=count($lignes);
 	$tabMoy=array();
+
+    $fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace.txt','w');
+    fseek($fichier, 0);
+
 	for($i=0;$i<$taille;$i++){
 		$tabMoy[$i]=$lignes[$i][0];
 	}
@@ -52,6 +56,6 @@ function generationFichierScoreMoyen($instanceAlgo){
 		$j++;
 	}
 	fclose($fichier);
-	echo $j;
+	//echo $j;
 }
 ?>
