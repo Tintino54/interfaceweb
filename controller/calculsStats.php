@@ -9,6 +9,48 @@ function calculMoyenne($tabMoy){
 	return $somme/$taille;
 }
 
+/*fonction qui détermine l'algorithme ayant la meilleure moyenne de score
+pour une iteration */
+function RechercheMoyIteration($probleme,$instance,$algo,$iteration){
+	$path='../problemes/'.$probleme.'/traces/'.$algo.'/'.$instance.'/moyenne_algo_trace.txt';
+	$moyennes=file($path);
+	//print_r($moyennes);
+	$debut=0;
+	$fin=count($moyennes);
+	$i=0;
+	while($debut<$fin){
+		$milieu=floor(($debut+$fin)/2);
+		$milieu."\r\n";
+		$line=$moyennes[$milieu];
+		if($iteration==strstr($line," ",true)){
+			return strstr($line,"0.");
+		}
+		else if($iteration<strstr($line," ",true)){
+			$fin=$milieu;
+		}
+		else{
+			$debut=$milieu+1;
+		}
+		$i++;
+		//echo "debut ".$debut." fin ".$fin."\r\n";
+	}
+	return strstr($line,"0.");
+}
+
+function algoMoyenneMax($probleme,$instance,$iteration){
+	$fichierExclus=array('.','..');
+	$max=0;
+	$algos=array_diff(scandir('../problemes/'.$probleme.'/traces'),$fichierExclus);
+	foreach ($algos as $key => $algo) {
+		$value=RechercheMoyIteration($probleme,$instance,$algo,$iteration);
+		if($value>$max){
+			$max=$value;
+			$algoMax=$algo;
+		}
+	}
+	return $algoMax;
+}
+
 function generationFichierScoreMoyen($instanceAlgo){
 	//création du fichier de sotckage des moyennes si il n'existe pas déjà
 
@@ -17,7 +59,7 @@ function generationFichierScoreMoyen($instanceAlgo){
 	$traces=scandir($instanceAlgo);
 	$lignes=array();
     if(file_exists($instanceAlgo.'/'.'moyenne_algo_trace.txt')){
-        return 0;
+        return 0;;
     }
 
 	//ouverture des traces stockées dans le tableau lignes
@@ -58,4 +100,9 @@ function generationFichierScoreMoyen($instanceAlgo){
 	fclose($fichier);
 	//echo $j;
 }
+/*$timestart=microtime(true);
+echo algoMoyenneMax("problemeNK","nk_128_8_0",623);
+	$timeend=microtime(true);
+	echo $time=$timeend-$timestart;*/
+//generationFichierScoreMoyen("../problemes/problemeNK/nk_512_8_0");
 ?>
