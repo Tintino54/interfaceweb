@@ -104,5 +104,5 @@ function generationFichierScoreMoyen($instanceAlgo){
 echo algoMoyenneMax("problemeNK","nk_128_8_0",623);
 	$timeend=microtime(true);
 	echo $time=$timeend-$timestart;*/
-//generationFichierScoreMoyen("../problemes/problemeNK/nk_512_8_0");
+generationFichierScoreMoyen("../problemes/problemeNK/traces/algo2/nk_256_8_0");
 ?>

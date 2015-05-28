@@ -36,36 +36,61 @@ function comparaison($tab1,$tab2){
 	}
 }
 
-
-function regroupement($tabResultat,$algo1,$algo2,$iteration,$resultatComp){
-	//l'algo 1 domine
-	if($resultatComp==1||$resultatComp==0){
-		$last=count($tabResultat[$algo1]);
-		if(!isset($tabResultat[$algo1][$last])||$tabResultat[$algo1][$last]->fin<$iteration-1){
-			//créer un nouvel intervalle
-			$last++;
-			$tabResultat[$algo1][$last]->debut=$iteration;
-			$tabResultat[$algo1][$last]->fin=$iteration;
-		}
-		else{
-			//incrémenter fin
-			$tabResultat[$algo1][$last]->fin++;
+function iterationMinimale($algos){
+	$minimum=99999999;
+	foreach ($algos as $i => $algo) {
+		foreach ($algo as $j => $trace) {
+			$pos=ftell($trace);
+			$ligne=fgets($trace);
+			if(!empty($ligne)){
+				$termine=false;
+				if(strstr($ligne," ",true)<=$minimum){
+						$minimum=strstr($ligne," ",true);
+				}
+				fseek($trace, $pos);
+			}
+			else{
+				unset($algos[$i][$j]);
+			}
 		}
 	}
-	//l'algo 2 domine
-	if($resultatComp==2||$resultatComp==0){
-		$last=count($tabResultat[$algo2]);
-		if(!isset($tabResultat[$algo2][$last])||$tabResultat[$algo2][$last]->fin<$iteration-1){
-			//créer un nouvel intervalle
-			$last++;
-			$tabResultat[$algo2][$last]->debut=$iteration;
-			$tabResultat[$algo2][$last]->fin=$iteration;
-		}
-		else{
-			//incrémenter fin
-			$tabResultat[$algo2][$last]->fin++;
-		}
+	return $minimum;
+}
 
+
+function regroupement($tabResultat,$algo1,$algo2,$iteration,$resultatComp){
+	$last1=count($tabResultat[$algo1]);
+	$last2=count($tabResultat[$algo2]);
+	if($resultatComp==1){
+		//l'iteration précédente n'était pas en gras
+		if($last1==0||isset($tabResultat[$algo1][$last1-1]->fin)){
+			$tabResultat[$algo1][$last1]=new stdClass();
+			$tabResultat[$algo1][$last1]->debut=$iteration;
+			if($last2!=0){
+				$tabResultat[$algo2][$last2-1]->fin=$iteration-1;
+			}
+		}	
+	}
+
+	else if($resultatComp==2){
+		if($last2==0||isset($tabResultat[$algo2][$last2-1]->fin)){
+			$tabResultat[$algo2][$last2]=new stdClass();
+			$tabResultat[$algo2][$last2]->debut=$iteration;
+			if($last1!=0){
+				$tabResultat[$algo1][$last1-1]->fin=$iteration-1;
+			}
+		}
+	}
+
+	else{
+		if($last1==0||isset($tabResultat[$algo1][$last1-1]->fin)){
+			$tabResultat[$algo1][$last1]=new stdClass();
+			$tabResultat[$algo1][$last1]->debut=$iteration;
+		}
+		if($last2==0||isset($tabResultat[$algo2][$last2-1]->fin)){
+			$tabResultat[$algo2][$last2]=new stdClass();
+			$tabResultat[$algo2][$last2]->debut=$iteration;
+		}
 	}
 
 }
@@ -84,51 +109,55 @@ function calculDominance($instance, $prob){
 	//ouverture des fichiers traces
 	foreach ($algos as $i => $algo) {
 		foreach ($algo as $j =>$trace) {
-			//echo $trace."\r\n";
 			$algos[$i][$j]=fopen($path.'/'.$i.'/'.$instance.'/'.$trace, "r");
 		}
 	}
 
 	$iteration=0;
+	$min=0;
 	$termine=false;
 	foreach ($algos as $i => $algo) {
 		$tabResultat[$i]=array();
 	}
-	while(!$termine){
+	while($min!=99999999){
 		$termine=true;
+		$iteration=$min;
+		$iteration=iterationMinimale(&$algos);
 		foreach ($algos as $i => $algo) {
 			foreach ($algo as $j => $trace) {
+				$termine=false;
 				$pos=ftell($trace);
 				$ligne=fgets($trace);
-				if(!empty($ligne)){
-					$termine=false;
-					if(strstr($ligne," ",true)<=$iteration){
-						$valeurs[$i][$j]=$ligne;
-					}
-					else{
-						fseek($trace, $pos);
-					}
+				if(strstr($ligne," ",true)==$iteration){
+					$valeurs[$i][$j]=$ligne;
 				}
 				else{
-					unset($algos[$i][$j]);
+					fseek($trace, $pos);
 				}
 			}
 		}
+		/*on compare l'ensemble des algos pour l'itération courant à celui
+		qui a la meilleure moyenne*/
 		$meilleurAlgo=algoMoyenneMax($prob,$instance,$iteration);
 		foreach ($valeurs as $algo=>$test){
 			if($algo!=$meilleurAlgo){
 				$resultatComp=comparaison($valeurs[$meilleurAlgo],$valeurs[$algo]);
-				echo $iteration.' '.$resultatComp."\r\n";
 				regroupement(&$tabResultat,$meilleurAlgo,$algo,$iteration,$resultatComp);
 			}
 		}
-		$iteration++;
+		$min=iterationMinimale(&$algos);
+	}
+	foreach ($tabResultat as $algo => $intervalle) {
+		$last=count($tabResultat[$algo]);
+		if($last!=0&&!isset($tabResultat[$algo][$last-1]->fin)){
+			$tabResultat[$algo][$last-1]->fin=$iteration;
+		}
 	}
 	$timeend=microtime(true);
-	echo $time=$timeend-$timestart;
-	print_r($tabResultat);
-	/*print_r($valeurs);
-	echo comparaison($valeurs['algo1'],$valeurs['algo2']);*/
+	//echo $time=$timeend-$timestart;
+	echo json_encode($tabResultat);
+	//print_r($valeurs);
+	//echo comparaison($valeurs['algo1'],$valeurs['algo2']);*/
 
 }
 calculDominance("nk_256_2_0","problemeNK");
