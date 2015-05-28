@@ -9,7 +9,7 @@ function comparaison($tab1,$tab2){
 	$taille=count($tab1);
 	$pvalue=95;
 	//récupération de la valeur pour le test binomial
-	$fichierTestBinomial=file("../test_binomial/test_binomial_p_".$pvalue.".txt");
+	$fichierTestBinomial=file("test_binomial/test_binomial_p_".$pvalue.".txt");
 	$valeurTestBinomial=strstr($fichierTestBinomial[$taille]," ");
 	$compteur1=0;
 	$compteur2=0;
@@ -100,7 +100,7 @@ Renvoie un tableau qui pour chaque algorithme contient un ensemble d'intervalles
 correspondant aux zones où ils ne sont pas dominés*/
 function calculDominance($instance, $prob){
 	$timestart=microtime(true);
-	$path="../problemes/".$prob.'/traces';
+	$path="problemes/".$prob.'/traces';
 	$repertoires=array_diff(scandir($path), array('..', '.'));
 	$fichiersExclus=array('.','..','moyenne_algo_trace.txt');
 	foreach ($repertoires as $key => $rep) {
@@ -122,7 +122,7 @@ function calculDominance($instance, $prob){
 	while($min!=99999999){
 		$termine=true;
 		$iteration=$min;
-		$iteration=iterationMinimale(&$algos);
+		$iteration=iterationMinimale($algos);
 		foreach ($algos as $i => $algo) {
 			foreach ($algo as $j => $trace) {
 				$termine=false;
@@ -142,10 +142,10 @@ function calculDominance($instance, $prob){
 		foreach ($valeurs as $algo=>$test){
 			if($algo!=$meilleurAlgo){
 				$resultatComp=comparaison($valeurs[$meilleurAlgo],$valeurs[$algo]);
-				regroupement(&$tabResultat,$meilleurAlgo,$algo,$iteration,$resultatComp);
+				regroupement($tabResultat,$meilleurAlgo,$algo,$iteration,$resultatComp);
 			}
 		}
-		$min=iterationMinimale(&$algos);
+		$min=iterationMinimale($algos);
 	}
 	foreach ($tabResultat as $algo => $intervalle) {
 		$last=count($tabResultat[$algo]);
@@ -155,7 +155,7 @@ function calculDominance($instance, $prob){
 	}
 	$timeend=microtime(true);
 	//echo $time=$timeend-$timestart;
-	echo json_encode($tabResultat);
+	//echo json_encode($tabResultat);
 	//print_r($valeurs);
 	//echo comparaison($valeurs['algo1'],$valeurs['algo2']);*/
 

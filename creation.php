@@ -1,6 +1,6 @@
 <?php
 require_once("controller/calculsStats.php");
-//require_once("cds.php");
+require_once("controller/cds2.php");
 $instance=$_GET['inst'];
 $np = $_GET['pb'];
 $algos=scandir('problemes/'.$np.'/traces');
