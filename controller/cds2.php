@@ -100,6 +100,10 @@ Renvoie un tableau qui pour chaque algorithme contient un ensemble d'intervalles
 correspondant aux zones où ils ne sont pas dominés*/
 function calculDominance($instance, $prob){
 	$timestart=microtime(true);
+	if(file_exists("../problemes/".$prob."/dominance/".$instance)){
+		return 0;
+	}
+	$fichierResultat=fopen("../problemes/".$prob."/dominance/".$instance,"w");
 	$path="../problemes/".$prob.'/traces';
 	$repertoires=array_diff(scandir($path), array('..', '.'));
 	$fichiersExclus=array('.','..','moyenne_algo_trace.txt');
@@ -155,10 +159,10 @@ function calculDominance($instance, $prob){
 	}
 	$timeend=microtime(true);
 	//echo $time=$timeend-$timestart;
-	echo json_encode($tabResultat);
+	fputs($fichierResultat,json_encode($tabResultat));
 	//print_r($valeurs);
 	//echo comparaison($valeurs['algo1'],$valeurs['algo2']);*/
 
 }
-calculDominance("nk_256_2_0","problemeNK");
+calculDominance("nk_256_8_0","problemeNK");
 ?>
