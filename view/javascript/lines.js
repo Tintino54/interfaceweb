@@ -2,19 +2,27 @@ var donneesLignes;
 var nbIt;
 
 function g(data){
-    //alert(data['algo1'][0]['fin']);
+    //alert(data['algo1'][0]['fin'])
     donneesLignes = data;
-    nbIt = Math.max(data['algo1'][data['algo1'].length-1]['fin'],  data['algo2'][data['algo2'].length-1]['fin']);
+    nbIt = data['nbIt'];
+   // nbIt = Math.max(data['algo1'][data['algo1'].length-1]['fin'],  data['algo2'][data['algo2'].length-1]['fin']);
 }
 
 //récupération des paramètres
-/*var param = window.location.href;
+var param = window.location.href;
 param = (window.location.href).split('?');
 param = param[1].split('&');
 param = param[1].split('=');
+
 param = param[1];
-var link = "./problemeNK/dominance/"+param;
-jQuery.getJSON(link, g);*/
+
+var probleme = (window.location.href).split('?');
+probleme = probleme[1].split('&');
+probleme = probleme[0].split('=');
+probleme = probleme[1];
+
+var link = "./problemes/"+probleme+"/dominance/"+param;
+jQuery.getJSON(link, g);
 $(document).ready(function () {
 //valeur de base de la largeur de la ligne
     var baseLW = 2;
@@ -124,11 +132,11 @@ $(document).ready(function () {
 
         dessineLigne(a);
 
-        /*for(var i = 0; i<donneesLignes[nomAlgo[a]].length; i++) {
+        for(var i = 0; i<donneesLignes[nomAlgo[a]].length; i++) {
             var debut = convertLength(donneesLignes[nomAlgo[a]][i]['debut'],nbIt , tailleCanvas);
             var fin = convertLength(donneesLignes[nomAlgo[a]][i]['fin'],nbIt , tailleCanvas);
             engraisse(a, debut, fin);
-        }*/
+        }
         a++;
 
     }

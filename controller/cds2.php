@@ -1,6 +1,9 @@
 <?php
 require_once("calculsStats.php");
 
+$instance=$_GET['inst'];
+$prob=$_GET['pb'];
+
 /*algo qui compare deux algorithmes pour une iteration sur un ensemble de traces
 renvoie 1 si l'algo domine
 renvoie 2 si l'ago 2 domine
@@ -36,7 +39,7 @@ function comparaison($tab1,$tab2){
 	}
 }
 
-function iterationMinimale($algos){
+function iterationMinimale(&$algos){
 	$minimum=99999999;
 	foreach ($algos as $i => $algo) {
 		foreach ($algo as $j => $trace) {
@@ -58,7 +61,7 @@ function iterationMinimale($algos){
 }
 
 
-function regroupement($tabResultat,$algo1,$algo2,$iteration,$resultatComp){
+function regroupement(&$tabResultat,$algo1,$algo2,$iteration,$resultatComp){
 	$last1=count($tabResultat[$algo1]);
 	$last2=count($tabResultat[$algo2]);
 	if($resultatComp==1){
@@ -100,15 +103,11 @@ Renvoie un tableau qui pour chaque algorithme contient un ensemble d'intervalles
 correspondant aux zones où ils ne sont pas dominés*/
 function calculDominance($instance, $prob){
 	$timestart=microtime(true);
-<<<<<<< HEAD
-	$path="problemes/".$prob.'/traces';
-=======
-	if(file_exists("../problemes/".$prob."/dominance/".$instance)){
+	if(file_exists("problemes/".$prob."/dominance/".$instance)){
 		return 0;
 	}
-	$fichierResultat=fopen("../problemes/".$prob."/dominance/".$instance,"w");
-	$path="../problemes/".$prob.'/traces';
->>>>>>> e128baaed0902481764eb59a60e519538150c206
+	$fichierResultat=fopen("problemes/".$prob."/dominance/".$instance,"w");
+	$path="problemes/".$prob.'/traces';
 	$repertoires=array_diff(scandir($path), array('..', '.'));
 	$fichiersExclus=array('.','..','moyenne_algo_trace.txt');
 	foreach ($repertoires as $key => $rep) {
@@ -163,14 +162,11 @@ function calculDominance($instance, $prob){
 	}
 	$timeend=microtime(true);
 	//echo $time=$timeend-$timestart;
-<<<<<<< HEAD
-	//echo json_encode($tabResultat);
-=======
+    $tabResultat['nbIt']=$iteration;
 	fputs($fichierResultat,json_encode($tabResultat));
->>>>>>> e128baaed0902481764eb59a60e519538150c206
 	//print_r($valeurs);
 	//echo comparaison($valeurs['algo1'],$valeurs['algo2']);*/
 
 }
-calculDominance("nk_256_8_0","problemeNK");
+calculDominance($instance, $prob);
 ?>
