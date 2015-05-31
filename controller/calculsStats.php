@@ -4,7 +4,7 @@ function calculMoyenne($tabMoy){
 	$taille=count($tabMoy);
 	$somme=0;
 	for($i=0;$i<$taille;$i++){
-		$somme+=strstr($tabMoy[$i],'0.');
+		$somme+=strstr($tabMoy[$i],' ');
 	}
 	return $somme/$taille;
 }
@@ -12,7 +12,7 @@ function calculMoyenne($tabMoy){
 /*fonction qui détermine l'algorithme ayant la meilleure moyenne de score
 pour une iteration */
 function RechercheMoyIteration($probleme,$instance,$algo,$iteration){
-	$path='problemes/'.$probleme.'/traces/'.$algo.'/'.$instance.'/moyenne_algo_trace.txt';
+	$path='../problemes/'.$probleme.'/traces/'.$algo.'/'.$instance.'/moyenne_algo_trace.txt';
 	$moyennes=file($path);
 	//print_r($moyennes);
 	$debut=0;
@@ -23,7 +23,7 @@ function RechercheMoyIteration($probleme,$instance,$algo,$iteration){
 		$milieu."\r\n";
 		$line=$moyennes[$milieu];
 		if($iteration==strstr($line," ",true)){
-			return strstr($line,"0.");
+			return strstr($line," ");
 		}
 		else if($iteration<strstr($line," ",true)){
 			$fin=$milieu;
@@ -34,13 +34,13 @@ function RechercheMoyIteration($probleme,$instance,$algo,$iteration){
 		$i++;
 		//echo "debut ".$debut." fin ".$fin."\r\n";
 	}
-	return strstr($line,"0.");
+	return strstr($line," ");
 }
 
 function algoMoyenneMax($probleme,$instance,$iteration){
 	$fichierExclus=array('.','..');
 	$max=0;
-	$algos=array_diff(scandir('problemes/'.$probleme.'/traces'),$fichierExclus);
+	$algos=array_diff(scandir('../problemes/'.$probleme.'/traces'),$fichierExclus);
 	foreach ($algos as $key => $algo) {
 		$value=RechercheMoyIteration($probleme,$instance,$algo,$iteration);
 		if($value>$max){
@@ -58,7 +58,7 @@ function generationFichierScoreMoyen($instanceAlgo){
 	$total=0;
 	$traces=scandir($instanceAlgo);
 	$lignes=array();
-    if(file_exists($instanceAlgo.'/'.'moyenne_algo_trace.txt')){
+   	if(file_exists($instanceAlgo.'/'.'moyenne_algo_trace.txt')){
         return 0;;
     }
 
@@ -71,8 +71,8 @@ function generationFichierScoreMoyen($instanceAlgo){
 	$taille=count($lignes);
 	$tabMoy=array();
 
-    $fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace.txt','w');
-    fseek($fichier, 0);
+   	$fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace.txt','w');
+   	fseek($fichier, 0);
 
 	for($i=0;$i<$taille;$i++){
 		$tabMoy[$i]=$lignes[$i][0];
@@ -83,12 +83,12 @@ function generationFichierScoreMoyen($instanceAlgo){
 		$termine=true;
 		$valueChanged=false;
 		for($i=0;$i<$taille;$i++){
-			$num=strstr($tabMoy[$i],' ',true);
+			$num=strstr(trim($tabMoy[$i]),' ',true);
 			if(isset($lignes[$i][$num+1])){
 				$termine=false;
-				if($lignes[$i][$num+1]<=$j){
+				if(strstr($lignes[$i][$num+1],' ',true)<=$j){
 					$valueChanged=true;
-					$tabMoy[$i]=($num+1).' '.strstr($lignes[$i][$num+1],'0.');
+					$tabMoy[$i]=($num+1).' '.trim(strstr($lignes[$i][$num+1],' '));
 				}
 			}
 		}
@@ -97,6 +97,7 @@ function generationFichierScoreMoyen($instanceAlgo){
 		}
 		$j++;
 	}
+	//print_r($tabMoy);
 	fclose($fichier);
 	//echo $j;
 }
@@ -104,5 +105,6 @@ function generationFichierScoreMoyen($instanceAlgo){
 echo algoMoyenneMax("problemeNK","nk_128_8_0",623);
 	$timeend=microtime(true);
 	echo $time=$timeend-$timestart;*/
-//generationFichierScoreMoyen("../problemes/problemeNK/traces/algo2/nk_256_8_0");
+//generationFichierScoreMoyen("../problemes/Flow-shop/traces/algo5_first_neutral/50_10_01_ta041");
+//generationFichierScoreMoyen("../problemes/problemeNK/traces/algo1/nk_128_2_0");
 ?>

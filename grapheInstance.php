@@ -1,6 +1,6 @@
  <?php
 require_once("view/Document.php");
-require_once("creation.php");
+require_once("controller/creation.php");
 
 $document = new Document("view/style.css", "utf8");
 $document->addJavascript("view/javascript/jquery.js");

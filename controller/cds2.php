@@ -1,8 +1,8 @@
 <?php
 require_once("calculsStats.php");
 
-$instance=$_GET['inst'];
-$prob=$_GET['pb'];
+/*$instance=$_GET['inst'];
+$prob=$_GET['pb'];*/
 
 /*algo qui compare deux algorithmes pour une iteration sur un ensemble de traces
 renvoie 1 si l'algo domine
@@ -12,13 +12,13 @@ function comparaison($tab1,$tab2){
 	$taille=count($tab1);
 	$pvalue=95;
 	//récupération de la valeur pour le test binomial
-	$fichierTestBinomial=file("test_binomial/test_binomial_p_".$pvalue.".txt");
+	$fichierTestBinomial=file("../test_binomial/test_binomial_p_".$pvalue.".txt");
 	$valeurTestBinomial=strstr($fichierTestBinomial[$taille]," ");
 	$compteur1=0;
 	$compteur2=0;
 	for($i=3;$i<$taille;$i++){
-		$valeurAlgo1=strstr($tab1[$i],"0.");
-		$valeurAlgo2=strstr($tab2[$i],"0.");
+		$valeurAlgo1=strstr($tab1[$i]," ");
+		$valeurAlgo2=strstr($tab2[$i]," ");
 
 		if($valeurAlgo1>$valeurAlgo2){
 			$compteur1++;
@@ -39,14 +39,24 @@ function comparaison($tab1,$tab2){
 	}
 }
 
+/*on recherche l'itération la petite parmit l'ensemble des lignes des fichiers traces
+pointées */
 function iterationMinimale(&$algos){
-	$minimum=99999999;
+	$minimum=-1;
 	foreach ($algos as $i => $algo) {
 		foreach ($algo as $j => $trace) {
+			//on initialise le minimumà la première valeur trouvée
+			if($minimum==-1){
+				$pos=ftell($trace);
+				$ligne=fgets($trace);
+				if(!empty($ligne)){
+					$minimum=strstr($ligne," ",true);
+				}
+				fseek($trace,$pos);
+			}
 			$pos=ftell($trace);
 			$ligne=fgets($trace);
 			if(!empty($ligne)){
-				$termine=false;
 				if(strstr($ligne," ",true)<=$minimum){
 						$minimum=strstr($ligne," ",true);
 				}
@@ -66,7 +76,7 @@ function regroupement(&$tabResultat,$algo1,$algo2,$iteration,$resultatComp){
 	$last2=count($tabResultat[$algo2]);
 	if($resultatComp==1){
 		//l'iteration précédente n'était pas en gras
-		if($last1==0||isset($tabResultat[$algo1][$last1-1]->fin)){
+		if($last1==0||(isset($tabResultat[$algo1][$last1-1]->fin)&&$tabResultat[$algo1][$last1-1]->fin!=$iteration-1)){
 			$tabResultat[$algo1][$last1]=new stdClass();
 			$tabResultat[$algo1][$last1]->debut=$iteration;
 			if($last2!=0){
@@ -99,15 +109,15 @@ function regroupement(&$tabResultat,$algo1,$algo2,$iteration,$resultatComp){
 }
 
 /*pour un problème donné compare l'ensemble des algorithmes sur une une instance.
-Renvoie un tableau qui pour chaque algorithme contient un ensemble d'intervalles
-correspondant aux zones où ils ne sont pas dominés*/
+Renvoie un tableau sous format Json qui pour chaque algorithme contient un ensemble 
+d'intervalles correspondant aux zones où ils ne sont pas dominés par un autre algorithme*/
 function calculDominance($instance, $prob){
 	$timestart=microtime(true);
-	if(file_exists("problemes/".$prob."/dominance/".$instance)){
+	if(file_exists("../problemes/".$prob."/dominance/".$instance)){
 		return 0;
 	}
-	$fichierResultat=fopen("problemes/".$prob."/dominance/".$instance,"w");
-	$path="problemes/".$prob.'/traces';
+	$fichierResultat=fopen("../problemes/".$prob."/dominance/".$instance,"w");
+	$path="../problemes/".$prob.'/traces';
 	$repertoires=array_diff(scandir($path), array('..', '.'));
 	$fichiersExclus=array('.','..','moyenne_algo_trace.txt');
 	foreach ($repertoires as $key => $rep) {
@@ -120,19 +130,15 @@ function calculDominance($instance, $prob){
 		}
 	}
 
-	$iteration=0;
-	$min=0;
-	$termine=false;
 	foreach ($algos as $i => $algo) {
 		$tabResultat[$i]=array();
 	}
-	while($min!=99999999){
-		$termine=true;
+	$min=0;
+	$termine=false;
+	while($min!=-1){
 		$iteration=$min;
-		$iteration=iterationMinimale($algos);
 		foreach ($algos as $i => $algo) {
 			foreach ($algo as $j => $trace) {
-				$termine=false;
 				$pos=ftell($trace);
 				$ligne=fgets($trace);
 				if(strstr($ligne," ",true)==$iteration){
@@ -154,6 +160,7 @@ function calculDominance($instance, $prob){
 		}
 		$min=iterationMinimale($algos);
 	}
+	/*on ferme les intervalles de chaque algorithmes*/
 	foreach ($tabResultat as $algo => $intervalle) {
 		$last=count($tabResultat[$algo]);
 		if($last!=0&&!isset($tabResultat[$algo][$last-1]->fin)){
@@ -164,9 +171,8 @@ function calculDominance($instance, $prob){
 	//echo $time=$timeend-$timestart;
     $tabResultat['nbIt']=$iteration;
 	fputs($fichierResultat,json_encode($tabResultat));
-	//print_r($valeurs);
-	//echo comparaison($valeurs['algo1'],$valeurs['algo2']);*/
 
 }
-calculDominance($instance, $prob);
+//calculDominance($instance, $prob);
+calculDominance("50_10_01_ta041","Flow-shop");
 ?>
