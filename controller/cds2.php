@@ -12,7 +12,7 @@ function comparaison($tab1,$tab2){
 	$taille=count($tab1);
 	$pvalue=95;
 	//récupération de la valeur pour le test binomial
-	$fichierTestBinomial=file("../test_binomial/test_binomial_p_".$pvalue.".txt");
+	$fichierTestBinomial=file("test_binomial/test_binomial_p_".$pvalue.".txt");
 	$valeurTestBinomial=strstr($fichierTestBinomial[$taille]," ");
 	$compteur1=0;
 	$compteur2=0;
@@ -113,11 +113,11 @@ Renvoie un tableau sous format Json qui pour chaque algorithme contient un ensem
 d'intervalles correspondant aux zones où ils ne sont pas dominés par un autre algorithme*/
 function calculDominance($instance, $prob){
 	$timestart=microtime(true);
-	if(file_exists("../problemes/".$prob."/dominance/".$instance)){
+	if(file_exists("problemes/".$prob."/dominance/".$instance)){
 		return 0;
 	}
-	$fichierResultat=fopen("../problemes/".$prob."/dominance/".$instance,"w");
-	$path="../problemes/".$prob.'/traces';
+	$fichierResultat=fopen("problemes/".$prob."/dominance/".$instance,"w");
+	$path="problemes/".$prob.'/traces';
 	$repertoires=array_diff(scandir($path), array('..', '.'));
 	$fichiersExclus=array('.','..','moyenne_algo_trace.txt');
 	foreach ($repertoires as $key => $rep) {

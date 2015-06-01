@@ -12,7 +12,7 @@ function calculMoyenne($tabMoy){
 /*fonction qui détermine l'algorithme ayant la meilleure moyenne de score
 pour une iteration */
 function RechercheMoyIteration($probleme,$instance,$algo,$iteration){
-	$path='../problemes/'.$probleme.'/traces/'.$algo.'/'.$instance.'/moyenne_algo_trace.txt';
+	$path='problemes/'.$probleme.'/traces/'.$algo.'/'.$instance.'/moyenne_algo_trace.txt';
 	$moyennes=file($path);
 	//print_r($moyennes);
 	$debut=0;
@@ -40,7 +40,7 @@ function RechercheMoyIteration($probleme,$instance,$algo,$iteration){
 function algoMoyenneMax($probleme,$instance,$iteration){
 	$fichierExclus=array('.','..');
 	$max=0;
-	$algos=array_diff(scandir('../problemes/'.$probleme.'/traces'),$fichierExclus);
+	$algos=array_diff(scandir('problemes/'.$probleme.'/traces'),$fichierExclus);
 	foreach ($algos as $key => $algo) {
 		$value=RechercheMoyIteration($probleme,$instance,$algo,$iteration);
 		if($value>$max){

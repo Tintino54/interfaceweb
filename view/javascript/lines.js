@@ -176,7 +176,7 @@ $(document).ready(function () {
     var param = window.location.href;
     param = (window.location.href).split('?');
     param = param[1];
-    var link = "./generation.php?"+param;
+    var link = "./controller/generation.php?"+param;
     jQuery.ajax({
         url:    link,
         success: gestionInstance,
