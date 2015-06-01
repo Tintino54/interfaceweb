@@ -1,8 +1,8 @@
 <?php
 require_once("calculsStats.php");
 
-/*$instance=$_GET['inst'];
-$prob=$_GET['pb'];*/
+$instance=$_GET['inst'];
+$prob=$_GET['pb'];
 
 /*algo qui compare deux algorithmes pour une iteration sur un ensemble de traces
 renvoie 1 si l'algo domine
@@ -71,32 +71,32 @@ function iterationMinimale(&$algos){
 }
 
 
-function regroupement(&$tabResultat,$algo1,$algo2,$iteration,$resultatComp){
+function regroupement(&$tabResultat,$algo1,$algo2,$iteration,$resultatComp,&$bool){
 	$last1=count($tabResultat[$algo1]);
 	$last2=count($tabResultat[$algo2]);
 	if($resultatComp==1){
 		//l'iteration précédente n'était pas en gras
-		if($last1==0||(isset($tabResultat[$algo1][$last1-1]->fin)&&$tabResultat[$algo1][$last1-1]->fin!=$iteration-1)){
+		if($last1==0||(isset($tabResultat[$algo1][$last1-1]->fin)&&!$bool)){
 			$tabResultat[$algo1][$last1]=new stdClass();
 			$tabResultat[$algo1][$last1]->debut=$iteration;
-			if($last2!=0){
-				$tabResultat[$algo2][$last2-1]->fin=$iteration-1;
-			}
-		}	
-	}
-
-	else if($resultatComp==2){
-		if($last2==0||isset($tabResultat[$algo2][$last2-1]->fin)){
-			$tabResultat[$algo2][$last2]=new stdClass();
-			$tabResultat[$algo2][$last2]->debut=$iteration;
-			if($last1!=0){
-				$tabResultat[$algo1][$last1-1]->fin=$iteration-1;
-			}
+		}
+		if($last2!=0&&!isset($tabResultat[$algo2][$last2-1]->fin)){
+			$tabResultat[$algo2][$last2-1]->fin=$iteration-1;
 		}
 	}
 
+	else if($resultatComp==2){
+		$bool=true;
+		if($last2==0||isset($tabResultat[$algo2][$last2-1]->fin)){
+			$tabResultat[$algo2][$last2]=new stdClass();
+			$tabResultat[$algo2][$last2]->debut=$iteration;
+		}
+		if($last1!=0&&(!isset($tabResultat[$algo1][$last1-1]->fin)&&!$bool)){
+				$tabResultat[$algo1][$last1-1]->fin=$iteration-1;
+		}
+	}
 	else{
-		if($last1==0||isset($tabResultat[$algo1][$last1-1]->fin)){
+		if($last1==0||(isset($tabResultat[$algo1][$last1-1]->fin)&&!$bool)){
 			$tabResultat[$algo1][$last1]=new stdClass();
 			$tabResultat[$algo1][$last1]->debut=$iteration;
 		}
@@ -131,9 +131,10 @@ function calculDominance($instance, $prob){
 	}
 
 	foreach ($algos as $i => $algo) {
-		$tabResultat[$i]=array();
+		$tabRes[$i]=array();
 	}
 	$min=0;
+	$iteration=0;
 	$termine=false;
 	while($min!=-1){
 		$iteration=$min;
@@ -152,27 +153,32 @@ function calculDominance($instance, $prob){
 		/*on compare l'ensemble des algos pour l'itération courant à celui
 		qui a la meilleure moyenne*/
 		$meilleurAlgo=algoMoyenneMax($prob,$instance,$iteration);
+		//echo $meilleurAlgo."\r\n";
+		$bool=false;
 		foreach ($valeurs as $algo=>$test){
 			if($algo!=$meilleurAlgo){
 				$resultatComp=comparaison($valeurs[$meilleurAlgo],$valeurs[$algo]);
-				regroupement($tabResultat,$meilleurAlgo,$algo,$iteration,$resultatComp);
+				regroupement($tabRes,$meilleurAlgo,$algo,$iteration,$resultatComp,$bool);
+		
+				//echo $algo." ".$resultatComp."\r\n";
 			}
 		}
 		$min=iterationMinimale($algos);
 	}
 	/*on ferme les intervalles de chaque algorithmes*/
-	foreach ($tabResultat as $algo => $intervalle) {
-		$last=count($tabResultat[$algo]);
-		if($last!=0&&!isset($tabResultat[$algo][$last-1]->fin)){
-			$tabResultat[$algo][$last-1]->fin=$iteration;
+	foreach ($tabRes as $algo => $intervalle) {
+		$last=count($tabRes[$algo]);
+		if($last!=0&&!isset($tabRes[$algo][$last-1]->fin)){
+			$tabRes[$algo][$last-1]->fin=$iteration;
 		}
 	}
 	$timeend=microtime(true);
+	print_r($tabRes);
 	//echo $time=$timeend-$timestart;
-    $tabResultat['nbIt']=$iteration;
-	fputs($fichierResultat,json_encode($tabResultat));
+   	$tabRes['nbIt']=$iteration;
+	fputs($fichierResultat,json_encode($tabRes));
 
 }
-//calculDominance($instance, $prob);
-calculDominance("50_10_01_ta041","Flow-shop");
+calculDominance($instance, $prob);
+//calculDominance("nk_128_2_0","problemeNK");
 ?>
