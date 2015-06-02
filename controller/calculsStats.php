@@ -38,7 +38,6 @@ function RechercheMoyIteration($probleme,$instance,$algo,$iteration){
 	$i=0;
 	while($debut<$fin){
 		$milieu=floor(($debut+$fin)/2);
-		$milieu."\r\n";
 		$line=$moyennes[$milieu];
 		if($iteration==strstr($line," ",true)){
 			return strstr($line," ");
@@ -70,6 +69,8 @@ function algoMoyenneMax($probleme,$instance,$iteration){
 }
 
 function generationFichierScoreMoyen($instanceAlgo){
+	/*echo $instanceAlgo;
+	echo "<br />";*/
 	//création du fichier de sotckage des moyennes si il n'existe pas déjà
 	if(file_exists($instanceAlgo.'/'.'moyenne_algo_trace.txt')){
         return 0;
@@ -103,8 +104,8 @@ function generationFichierScoreMoyen($instanceAlgo){
 	}
 	fclose($fichier);
 }
-/*$timestart=microtime(true);
-generationFichierScoreMoyen("../problemes/Flow-shop/traces/algo5_first_neutral/50_10_01_ta041");
-$timeend=microtime(true);
-echo $time=$timeend-$timestart;*/
+//$timestart=microtime(true);
+//generationFichierScoreMoyen("../problemes/problemeNK/traces/algo2/nk_128_2_0");
+//$timeend=microtime(true);
+//echo $time=$timeend-$timestart;
 ?>

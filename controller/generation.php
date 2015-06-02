@@ -1,5 +1,5 @@
 <?php
-require_once("calculsStats.php");
+//require_once("calculsStats.php");
 $instance=$_GET['inst'];
 $np = $_GET['pb'];
 $algos=scandir('../problemes/'.$np.'/traces');

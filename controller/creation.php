@@ -1,5 +1,4 @@
 <?php
-require_once("calculsStats.php");
 require_once("cds2.php");
 $instance=$_GET['inst'];
 $np = $_GET['pb'];
@@ -13,5 +12,6 @@ $algos=scandir('problemes/'.$np.'/traces');
 			generationFichierScoreMoyen($nf);
 		}
 	}
+	calculDominance($instance,$np);
 
 ?>

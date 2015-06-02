@@ -1,8 +1,5 @@
 <?php
-//require_once("calculsStats.php");
-
-$instance=$_GET['inst'];
-$prob=$_GET['pb'];
+require_once("calculsStats.php");
 
 /*algo qui compare deux algorithmes pour une iteration sur un ensemble de traces
 renvoie 1 si l'algo domine
@@ -173,12 +170,14 @@ function calculDominance($instance, $prob){
 		}
 	}
 	$timeend=microtime(true);
-	print_r($tabRes);
 	//echo $time=$timeend-$timestart;
    	$tabRes['nbIt']=$iteration;
+   /*	echo "appel";
+   	echo "<br />";*/
+  	
 	fputs($fichierResultat,json_encode($tabRes));
 
 }
-calculDominance($instance, $prob);
-//calculDominance("nk_128_2_0","problemeNK");
+//calculDominance("50_10_01_ta041", "Flow-shop");
+
 ?>
