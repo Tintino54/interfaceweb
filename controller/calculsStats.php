@@ -72,7 +72,7 @@ function algoMoyenneMax($probleme,$instance,$iteration){
 function generationFichierScoreMoyen($instanceAlgo){
 	//création du fichier de sotckage des moyennes si il n'existe pas déjà
 	if(file_exists($instanceAlgo.'/'.'moyenne_algo_trace.txt')){
-        return 0;;
+        return 0;
     }
 
     $fichier=fopen($instanceAlgo.'/'.'moyenne_algo_trace.txt','w');

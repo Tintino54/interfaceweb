@@ -1,5 +1,5 @@
 <?php
-require_once("calculsStats.php");
+//require_once("calculsStats.php");
 
 $instance=$_GET['inst'];
 $prob=$_GET['pb'];
@@ -45,7 +45,7 @@ function iterationMinimale(&$algos){
 	$minimum=-1;
 	foreach ($algos as $i => $algo) {
 		foreach ($algo as $j => $trace) {
-			//on initialise le minimumà la première valeur trouvée
+			//on initialise le minimum à la première valeur trouvée
 			if($minimum==-1){
 				$pos=ftell($trace);
 				$ligne=fgets($trace);
