@@ -12,6 +12,10 @@ echo '<h1 id="titreProbleme">'.$var1.'</h1>';
 //liste des instances avec le lien des téléchargements
 $instances='problemes/'.$var1.'/instances';
 $tabDir=scandir($instances);
+$desc = file('problemes/'.$var1.'/description.txt');
+for($i = 0; $i < count($desc); $i++){
+    echo $desc[$i];
+}
 echo '<ul>';
 for($i=2;$i<count($tabDir);$i++) {
 	$page='grapheInstance.php?pb='.$var1.'&inst='.$tabDir[$i];
