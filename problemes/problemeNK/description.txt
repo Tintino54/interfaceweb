@@ -1,0 +1,1 @@
+ est un problème abstrait permettant la génération de fonctions objectif dont les interactions épistatiques entre variables sont paramétrables.

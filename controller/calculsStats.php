@@ -1,5 +1,5 @@
 <?php
-
+/*calcul la moyenne à partir d'un tableau de valeur*/
 function calculMoyenne($valeurs){
 	$taille=count($valeurs);
 	$somme=0;
@@ -9,6 +9,8 @@ function calculMoyenne($valeurs){
 	return $somme/$taille;
 }
 
+/*retourne l'itération qui à la valeur minimale parmit les valeurs des lignes
+ pointées par le tableau de fichiers traces */
 function iterationMin(&$traces){
 	$min=-1;
 	foreach ($traces as $i => $trace) {
@@ -27,51 +29,10 @@ function iterationMin(&$traces){
 	return $min;
 }
 
-/*fonction qui détermine l'algorithme ayant la meilleure moyenne de score
-pour une iteration */
-function RechercheMoyIteration($probleme,$instance,$algo,$iteration){
-	$path='problemes/'.$probleme.'/traces/'.$algo.'/'.$instance.'/moyenne_algo_trace.txt';
-	$moyennes=file($path);
-	//print_r($moyennes);
-	$debut=0;
-	$fin=count($moyennes);
-	$i=0;
-	while($debut<$fin){
-		$milieu=floor(($debut+$fin)/2);
-		$line=$moyennes[$milieu];
-		if($iteration==strstr($line," ",true)){
-			return strstr($line," ");
-		}
-		else if($iteration<strstr($line," ",true)){
-			$fin=$milieu;
-		}
-		else{
-			$debut=$milieu+1;
-		}
-		$i++;
-		//echo "debut ".$debut." fin ".$fin."\r\n";
-	}
-	return strstr($line," ");
-}
-
-function algoMoyenneMax($probleme,$instance,$iteration){
-	$fichierExclus=array('.','..');
-	$max=0;
-	$algos=array_diff(scandir('problemes/'.$probleme.'/traces'),$fichierExclus);
-	foreach ($algos as $key => $algo) {
-		$value=RechercheMoyIteration($probleme,$instance,$algo,$iteration);
-		if($value>$max){
-			$max=$value;
-			$algoMax=$algo;
-		}
-	}
-	return $algoMax;
-}
-
+/*Génère un fichier de moyenne à partir d'un chemin correspond à l'emplacement 
+des fichiers traces d'un algorithme pour un problème*/
 function generationFichierScoreMoyen($instanceAlgo){
-	/*echo $instanceAlgo;
-	echo "<br />";*/
-	//création du fichier de sotckage des moyennes si il n'existe pas déjà
+	//on vérifie que le fichier de moyenne n'existe pas déjà
 	if(file_exists($instanceAlgo.'/'.'moyenne_algo_trace.txt')){
         return 0;
     }
@@ -82,11 +43,12 @@ function generationFichierScoreMoyen($instanceAlgo){
 	$fichiersExclus=array('.','..','moyenne_algo_trace.txt');
 	$traces=array_diff(scandir($instanceAlgo),$fichiersExclus);
 
-	//ouverture des traces stockées dans le tableau lignes
+	//ouverture des fichiers traces
 	foreach ($traces as $i => $trace) {
 		$traces[$i]=fopen($instanceAlgo.'/'.$traces[$i],"r");
 	}
 	$min=0;
+	//récupération des lignes 
 	while($min!=-1){
 		$iteration=$min;
 		foreach ($traces as $i => $trace) {
@@ -105,7 +67,7 @@ function generationFichierScoreMoyen($instanceAlgo){
 	fclose($fichier);
 }
 //$timestart=microtime(true);
-//generationFichierScoreMoyen("../problemes/problemeNK/traces/algo2/nk_128_2_0");
+//generationFichierScoreMoyen("../problemes/MAXSAT/traces/algo5_first_neutral/bw_large.d");
 //$timeend=microtime(true);
 //echo $time=$timeend-$timestart;
 ?>

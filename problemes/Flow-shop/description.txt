@@ -1,0 +1,2 @@
+consiste à ordonner un ensemble de <i>n</i> jobs sur <i>m</i> machines. Plusieurs jobs ne peuvent être affectés simultanément à une même machine. Chaque job est composé de $m$ tâches consécutives requérant chacune des machines $m_j$. A chaque tâche est associé un temps de traitement.
+Variante considérée : flowshop de permutation, où les jobs doivent être planifiés dans le même ordre sur toutes les machines.

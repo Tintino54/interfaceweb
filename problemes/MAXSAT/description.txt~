@@ -1,0 +1,2 @@
+ consiste à déterminer une instanciation de <i>n</i> variables booléennes qui satisfait un nombre maximum de clauses d'une formule exprimée sous forme normale conjonctive.
+

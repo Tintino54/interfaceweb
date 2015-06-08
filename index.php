@@ -14,8 +14,18 @@ $document->fh();
 $document->begin();
 $document->header();
 $document->beginSection("corpPage", "formdiv");
+    $problemes = array_diff(scandir('problemes'),array('.','..'));
+	$tableau = new Tableau("problemes", "prob", 5);
+	foreach ($problemes as $key => $probleme) {
+		$description=file_get_contents("problemes/".$probleme."/description.txt");
+		$texte='<h5><a href="./algorithms.php?pb='.$probleme.'">'.$probleme.'</a></h5>';
+		$texte.='<p>'.substr($description, 0, 65).'...'.'</p>';
+        $ligne = new Ligne($texte);
+		$tableau->addLigne($ligne);
+	}
+	$tableau->generate();
 
-$document->writeProblems();
+//$document->writeProblems();
 $document->end();
 $document->endSection();
 ?>
